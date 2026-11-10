@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Servicios Ma&amp;Ye | Agriculture, Transport &amp; Logistics</title>
+<meta name="description" content="Servicios Ma&amp;Ye: from the field to the finest hotels in the Caribbean. Agriculture, transport and logistics since 2014. Cuba, Panama, Dominican Republic and UAE.">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#D7261E;--ink:#111;--ink2:#1A1A1A;--grey:#6B6B6B;--line:#E6E6E6;--soft:#F5F5F5;--white:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--white);font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--red)}
+h1,h2,h3{font-weight:300;letter-spacing:-.02em;line-height:1.1}
+h2{font-size:clamp(32px,4.4vw,52px);margin:14px 0 22px}
+.lead{font-size:18px;color:var(--grey);max-width:620px}
+section{padding:120px 0}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(17,17,17,.96);backdrop-filter:blur(8px);color:#fff}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:44px;width:auto}
+.brand span{font-size:14px;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.menu{display:flex;gap:34px;font-size:14px;color:#cfcfcf}
+.menu a:hover{color:#fff}
+.btn{display:inline-block;padding:14px 28px;font-size:14px;font-weight:500;letter-spacing:.04em;border:1px solid currentColor;transition:.25s}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn.red:hover{background:#b81e17;border-color:#b81e17}
+.btn.ghost{color:#fff}
+.btn.ghost:hover{background:#fff;color:var(--ink)}
+.menu .btn{padding:10px 20px;color:#fff}
+
+/* hero */
+.hero{background:var(--ink);color:#fff;padding:0;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.25fr .75fr;align-items:center;min-height:calc(100vh - 72px);gap:40px}
+.hero h1{font-size:clamp(44px,6.4vw,86px);margin:22px 0 26px}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero p{font-size:19px;color:#bdbdbd;max-width:520px;margin-bottom:40px}
+.hero .ctas{display:flex;gap:14px;flex-wrap:wrap}
+.hero-logo{justify-self:center;width:min(340px,80%);opacity:.95}
+.hero-road{position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--red) 30%,var(--red) 70%,transparent)}
+
+/* about */
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.about p{font-size:18px;color:#333;margin-bottom:18px}
+
+/* stats */
+.stats{background:var(--soft);padding:90px 0}
+.stats .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+.stat{padding:10px 26px;border-left:1px solid #d9d9d9}
+.stat:first-child{border-left:0;padding-left:0}
+.stat b{display:block;font-size:clamp(36px,4vw,54px);font-weight:300;letter-spacing:-.03em;line-height:1}
+.stat b i{font-style:normal;color:var(--red)}
+.stat span{display:block;margin-top:12px;font-size:14px;color:var(--grey)}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px}
+.svc{background:#fff;padding:44px 36px;min-height:260px;transition:.3s;position:relative}
+.svc:hover{background:var(--ink);color:#fff}
+.svc:hover p{color:#bdbdbd}
+.svc .num{font-size:12px;letter-spacing:.2em;color:var(--red);font-weight:500}
+.svc svg{width:40px;height:40px;margin:26px 0 18px;stroke:currentColor;fill:none;stroke-width:1.3}
+.svc h3{font-size:22px;margin-bottom:10px}
+.svc p{font-size:15px;color:var(--grey)}
+
+/* flow */
+.flow{background:var(--ink);color:#fff}
+.flow .lead{color:#a8a8a8}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:64px;position:relative}
+.steps:before{content:"";position:absolute;top:27px;left:12%;right:12%;height:1px;background:#444}
+.step{text-align:center;position:relative}
+.step .dot{width:56px;height:56px;border-radius:50%;border:1px solid #555;background:var(--ink);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:15px}
+.step:nth-child(odd) .dot{border-color:var(--red);color:var(--red)}
+.step h3{font-size:20px;margin-bottom:6px}
+.step p{font-size:14px;color:#a8a8a8;max-width:200px;margin:0 auto}
+
+/* trusted */
+.trusted{text-align:center}
+.trusted .lead{margin:0 auto}
+.brands{display:flex;justify-content:center;gap:70px;flex-wrap:wrap;margin:56px 0 40px;font-size:clamp(26px,3vw,38px);font-weight:300;letter-spacing:.06em;color:var(--ink2)}
+.brands span{border-bottom:1px solid var(--red);padding-bottom:6px}
+.places{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.places span{font-size:13px;padding:8px 16px;border:1px solid var(--line);color:var(--grey);letter-spacing:.04em}
+
+/* timeline */
+.journey{background:var(--soft)}
+.tl{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #cfcfcf}
+.tl div{padding:28px 26px 0 0;position:relative}
+.tl div:before{content:"";position:absolute;top:-6px;left:0;width:11px;height:11px;border-radius:50%;background:var(--ink)}
+.tl div:last-child:before{background:var(--red)}
+.tl b{display:block;font-size:30px;font-weight:300;letter-spacing:-.02em;margin-bottom:8px}
+.tl p{font-size:15px;color:#444}
+
+/* countries */
+.countries{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px}
+.country{border:1px solid var(--line);padding:34px 28px;min-height:250px;display:flex;flex-direction:column}
+.country.live{background:var(--ink);color:#fff;border-color:var(--ink)}
+.country .tag{align-self:flex-start;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;padding:6px 12px;border:1px solid var(--line);color:var(--grey)}
+.country.live .tag{background:var(--red);border-color:var(--red);color:#fff}
+.country h3{font-size:26px;margin:auto 0 10px;padding-top:40px}
+.country p{font-size:14px;color:var(--grey)}
+.country.live p{color:#bdbdbd}
+
+/* contact */
+.contact{background:var(--ink);color:#fff;text-align:center}
+.contact h2{font-size:clamp(36px,5vw,64px)}
+.contact .lead{color:#a8a8a8;margin:0 auto 40px}
+.contact .ctas{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.contact .mail{margin-top:30px;font-size:15px;color:#bdbdbd}
+footer{background:#0b0b0b;color:#8a8a8a;font-size:13px;padding:40px 0}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer img{height:38px}
+
+@media (max-width:900px){
+  .menu a:not(.btn){display:none}
+  .hero .wrap{grid-template-columns:1fr;padding-top:60px;padding-bottom:80px;min-height:auto}
+  .hero-logo{width:200px;justify-self:start}
+  .about .wrap{grid-template-columns:1fr;gap:20px}
+  .stats .grid{grid-template-columns:repeat(2,1fr);gap:30px}
+  .stat{border-left:0;padding-left:0}
+  .svc-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr);gap:40px}
+  .steps:before{display:none}
+  .tl{grid-template-columns:1fr 1fr;row-gap:30px}
+  .countries{grid-template-columns:1fr 1fr}
+  section{padding:80px 0}
+  .wrap{padding:0 20px}
+}
+@media (max-width:520px){.countries{grid-template-columns:1fr}.brand span{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><img src="assets/logo-light.png" alt="Servicios Ma&amp;Ye logo"><span>Servicios Ma&amp;Ye</span></a>
+    <nav class="menu">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#journey">Journey</a>
+      <a href="#locations">Locations</a>
+      <a class="btn" href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Agriculture · Transport · Logistics</div>
+      <h1>From the field to the finest hotels in the <em>Caribbean</em>.</h1>
+      <p>We grow it, we move it, we deliver it. Since 2014.</p>
+      <div class="ctas">
+        <a class="btn red" href="#services">Our services</a>
+        <a class="btn ghost" href="#contact">Contact us</a>
+      </div>
+    </div>
+    <img class="hero-logo" src="assets/logo-light.png" alt="Servicios Ma&amp;Ye">
+  </div>
+  <div class="hero-road"></div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Who we are</div>
+      <h2>A family business with one simple idea.</h2>
+    </div>
+    <div>
+      <p>Servicios Ma&amp;Ye was born in Cuba in 2014: grow the food, move it ourselves and deliver it straight to hotels.</p>
+      <p>More than a decade later, we are a fully integrated agriculture and logistics company trusted by leading international hotel brands.</p>
+      <p>Now we are taking that know-how to Panama, the Dominican Republic and the United Arab Emirates.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap grid">
+    <div class="stat"><b>2014</b><span>Founded in Cuba</span></div>
+    <div class="stat"><b>500K<i>+</i></b><span>m² of farmland</span></div>
+    <div class="stat"><b>10</b><span>Cargo trailers</span></div>
+    <div class="stat"><b>2</b><span>Refrigerated trucks</span></div>
+    <div class="stat"><b>4</b><span>Countries</span></div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="eyebrow">What we do</div>
+    <h2>One partner, from farm to door.</h2>
+    <p class="lead">Six services that work as one chain, so our clients deal with a single team.</p>
+    <div class="svc-grid">
+      <div class="svc"><div class="num">01</div>
+        <svg viewBox="0 0 40 40"><path d="M20 36V14"/><path d="M20 22c-6 0-10-4-10-10 6 0 10 4 10 10z"/><path d="M20 18c0-6 4-10 10-10 0 6-4 10-10 10z"/><path d="M6 36h28"/></svg>
+        <h3>Agriculture</h3><p>Potato, sweet potato, malanga and fresh produce grown on our own farm.</p></div>
+      <div class="svc"><div class="num">02</div>
+        <svg viewBox="0 0 40 40"><path d="M6 34V12l14-6 14 6v22"/><path d="M14 34V20h12v14"/><path d="M4 34h32"/></svg>
+        <h3>Hotel supply</h3><p>Fresh produce delivered directly to hotels and resorts, on time and to hotel standards.</p></div>
+      <div class="svc"><div class="num">03</div>
+        <svg viewBox="0 0 40 40"><rect x="3" y="12" width="22" height="16"/><path d="M25 17h7l5 6v5H25z"/><circle cx="11" cy="31" r="3"/><circle cx="30" cy="31" r="3"/></svg>
+        <h3>Cargo transport</h3><p>Trailers, box trucks and a complete fleet for third-party freight.</p></div>
+      <div class="svc"><div class="num">04</div>
+        <svg viewBox="0 0 40 40"><path d="M20 4v32M6 12l28 16M34 12L6 28"/><path d="M16 6l4 3 4-3M16 34l4-3 4 3"/></svg>
+        <h3>Refrigerated transport</h3><p>Cold-chain delivery that keeps perishable goods fresh from origin to destination.</p></div>
+      <div class="svc"><div class="num">05</div>
+        <svg viewBox="0 0 40 40"><path d="M5 26l3-9c.5-1.5 2-2.5 3.5-2.5h17c1.5 0 3 1 3.5 2.5l3 9v6H5z"/><path d="M5 26h30"/><circle cx="11" cy="30" r="1.5"/><circle cx="29" cy="30" r="1.5"/></svg>
+        <h3>Car rental</h3><p>Vehicles for tourism and corporate clients.</p></div>
+      <div class="svc"><div class="num">06</div>
+        <svg viewBox="0 0 40 40"><circle cx="8" cy="20" r="4"/><circle cx="32" cy="9" r="4"/><circle cx="32" cy="31" r="4"/><path d="M12 18l16-7M12 22l16 7"/></svg>
+        <h3>Logistics solutions</h3><p>Freight coordination and partnerships with trusted local carriers.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>We control every step.</h2>
+    <p class="lead">No middlemen between the harvest and your kitchen.</p>
+    <div class="steps">
+      <div class="step"><div class="dot">01</div><h3>Farm</h3><p>We grow on our own land.</p></div>
+      <div class="step"><div class="dot">02</div><h3>Harvest</h3><p>Selected and prepared to order.</p></div>
+      <div class="step"><div class="dot">03</div><h3>Our fleet</h3><p>Moved by our own trucks.</p></div>
+      <div class="step"><div class="dot">04</div><h3>Hotel</h3><p>Delivered fresh, on schedule.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="trusted">
+  <div class="wrap">
+    <div class="eyebrow">Trusted by</div>
+    <h2>Supplying Cuba's top destinations.</h2>
+    <p class="lead">We have worked with international hotel brands across the country's leading resort areas, among others.</p>
+    <div class="brands"><span>Meliá</span><span>Muthu</span><span>Blue Diamond</span></div>
+    <div class="places"><span>Cayo Santa María</span><span>Cayo Guillermo</span><span>Cayo Coco</span><span>Holguín</span><span>Guardalavaca</span></div>
+  </div>
+</section>
+
+<section class="journey" id="journey">
+  <div class="wrap">
+    <div class="eyebrow">Our journey</div>
+    <h2>Built step by step.</h2>
+    <div class="tl">
+      <div><b>2014</b><p>Servicios Ma&amp;Ye is founded in Cuba.</p></div>
+      <div><b>Hotels</b><p>Supply contracts across Cuba's cays and Holguín.</p></div>
+      <div><b>Fleet</b><p>Trailers, refrigerated trucks and car rental join the business.</p></div>
+      <div><b>2026</b><p>International expansion: Panama, Dominican Republic and UAE.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="locations">
+  <div class="wrap">
+    <div class="eyebrow">Where we are</div>
+    <h2>Caribbean roots. Global reach.</h2>
+    <div class="countries">
+      <div class="country live"><span class="tag">Operating</span><h3>Cuba</h3><p>Since 2014. Agriculture, hotel supply and transport.</p></div>
+      <div class="country"><span class="tag">Coming soon</span><h3>Panama</h3><p>The logistics and transport hub of the Americas.</p></div>
+      <div class="country"><span class="tag">Coming soon</span><h3>Dominican Republic</h3><p>Hotel supply and transport for the Caribbean's largest tourism market.</p></div>
+      <div class="country"><span class="tag">Coming soon</span><h3>United Arab Emirates</h3><p>International business development and partnerships, from Dubai.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="eyebrow">Contact</div>
+    <h2>Let's move something together.</h2>
+    <p class="lead">Tell us what you need: fresh produce, transport or logistics. We will get back to you with a proposal.</p>
+    <div class="ctas">
+      <a class="btn red" href="mailto:laura.leyva@serviciosmaye.com?subject=Quote%20request">Request a quote</a>
+      <a class="btn ghost" href="mailto:laura.leyva@serviciosmaye.com">Email us</a>
+    </div>
+    <p class="mail"><b style="color:#fff;font-weight:500">Laura Leyva</b> · Managing Director<br>laura.leyva@serviciosmaye.com</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/logo-light.png" alt="Servicios Ma&amp;Ye">
+    <span>Cuba · Panama · Dominican Republic · United Arab Emirates</span>
+    <span>© 2026 Servicios Ma&amp;Ye S.R.L.</span>
+  </div>
+</footer>
+
+</body>
+</html>
