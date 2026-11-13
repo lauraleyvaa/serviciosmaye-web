@@ -247,6 +247,22 @@ body.mo .fab,body.mo .mbar{display:none!important}
 .sug button small{color:var(--grey);font-size:12.5px}
 .sug .none{padding:10px 12px;font-size:13.5px;color:var(--grey)}
 
+.leg{border:1px solid var(--line);border-left:4px solid var(--grey);padding:16px;margin-top:14px;background:#fff}
+.leg.pu{border-left-color:#D7261E}.leg.de{border-left-color:#2A6BD1}
+.leg.set{background:#FAFAFA}
+.leghead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.leghead b{font-size:16px}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot.pu{background:#D7261E}.dot.de{background:#2A6BD1}
+.legval{margin-left:auto;font-size:13px;color:var(--grey);max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leg.set .legval{color:var(--ink);font-weight:600}
+.leg.set .legval:before{content:"✓ ";color:#1E8A4C}
+.mapbtn{white-space:nowrap;padding:10px 12px;font-size:13px;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
+.mapbtn:hover{border-color:var(--ink)}
+.mapbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.maphint{margin:16px 0 8px;font-size:13.5px;color:var(--grey);padding:10px 12px;background:var(--soft)}
+.maphint.act{color:#fff;background:var(--ink);font-weight:600}
+
 /* reveal */
 .rv{opacity:0;transform:translateY(18px);transition:.6s ease}
 .rv.in{opacity:1;transform:none}
@@ -466,16 +482,25 @@ body.mo .fab,body.mo .mbar{display:none!important}
           <div class="fsec" data-i="q_sec_route">Route</div>
           <div class="fg">
             <div class="full ctryfix"><span data-i="q_ctry1">Country</span><b data-i="c_ae">United Arab Emirates</b><select id="q_pc" hidden onchange="fillPorts();"></select><select id="q_dc" hidden></select></div>
-            <div><label for="q_pp" data-i="q_pp">Pick-up point</label><select id="q_pp" onchange="pickPort()"></select></div>
-            <div><label for="q_emi" data-i="q_emi">Delivery emirate</label><select id="q_emi" onchange="fillAreas(true)"></select></div>
-            <div><label for="q_area" data-i="q_area">Delivery area</label><select id="q_area" onchange="pickArea()"></select></div>
-            <div class="sugwrap"><label for="q_ds" data-i="q_dsl">Building, street or warehouse</label><div class="srch"><input id="q_ds" data-ph="q_ds_ph" placeholder="Start typing: warehouse, hotel, building or street" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="q_sug"><button type="button" class="btn btn-dark" onclick="findAddr()" data-i="q_find">Find</button></div><div class="sug" id="q_sug" role="listbox" hidden></div></div>
+          </div>
+          <div class="leg pu" id="leg-pu">
+            <div class="leghead"><i class="dot pu"></i><b data-i="q_leg_pu">Pick-up</b><span class="legval" id="q_puval" data-i="q_notset">Not set yet</span></div>
+            <div class="fg">
+              <div><label for="q_pp" data-i="q_pp">Port or terminal</label><select id="q_pp" onchange="pickPort()"></select></div>
+              <div class="sugwrap"><label for="q_ps" data-i="q_psl">Or type an address</label><div class="srch"><input id="q_ps" data-ph="q_ds_ph" placeholder="Start typing: warehouse, hotel, building or street" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="q_psug"><button type="button" class="btn mapbtn" id="mb-pu" onclick="mapMode('pu')" data-i="q_onmap">Pick on map</button></div><div class="sug" id="q_psug" role="listbox" hidden></div></div>
+            </div>
+          </div>
+          <div class="leg de" id="leg-de">
+            <div class="leghead"><i class="dot de"></i><b data-i="q_leg_de">Delivery</b><span class="legval" id="q_deval" data-i="q_notset">Not set yet</span></div>
+            <div class="fg">
+              <div><label for="q_emi" data-i="q_emi">Delivery emirate</label><select id="q_emi" onchange="fillAreas(true)"></select></div>
+              <div><label for="q_area" data-i="q_area">Delivery area</label><select id="q_area" onchange="pickArea()"></select></div>
+              <div class="full sugwrap"><label for="q_ds" data-i="q_dsl">Building, hotel, street or warehouse</label><div class="srch"><input id="q_ds" data-ph="q_ds_ph" placeholder="Start typing: warehouse, hotel, building or street" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="q_sug"><button type="button" class="btn mapbtn" id="mb-de" onclick="mapMode('de')" data-i="q_onmap">Pick on map</button></div><div class="sug" id="q_sug" role="listbox" hidden></div></div>
+            </div>
+          </div>
+          <div class="fg">
             <div class="full">
-              <div class="maptools">
-                <button type="button" class="mt on" id="mt-pu" onclick="setPinMode('pu')"><i class="pu"></i><span data-i="q_pin_pu">Set pick-up</span></button>
-                <button type="button" class="mt" id="mt-de" onclick="setPinMode('de')"><i class="de"></i><span data-i="q_pin_de">Set delivery</span></button>
-                <span class="hint" data-i="q_maphint">Tap the map to drop the pin. You can drag pins to adjust.</span>
-              </div>
+              <div class="maphint" id="q_maphint" data-i="q_hint0">Choose a port or type an address, or use "Pick on map". You can drag the pins to adjust.</div>
               <div id="qmap" role="application" aria-label="Map"></div>
               <div class="dist">
                 <div class="km"><span data-i="q_km">Road distance</span><b id="q_kmv">–</b></div>
@@ -538,7 +563,7 @@ var I = {
   fi_h:"Ready to move?",fi_p:"Tell us what you need and we will get back to you with a proposal.",
   f_tag:"Transport, logistics and supply since 2014.",f_co:"Company",f_ct:"Contact",f_c:"Cuba · United Arab Emirates · Panama · Dominican Republic",
   q_h:"Get a quote",q_p:"Leave your details and we will contact you with a proposal.",q_name:"Name",q_co:"Company",q_ph:"Phone / WhatsApp",q_srv:"Service",q_ctry:"Country",q_notes:"Notes: add context or more information",q_notes_ph:"What do you need? Origin, destination, dates, volume, temperature, number of passengers...",q_send:"Send request",q_note:"No commitment. We only use your details to reply to you.",q_sending:"Sending...",q_ok_h:"Thank you!",q_ok_p:"We have received your request and will contact you soon.",q_close:"Close",q_other:"Other / not sure",
-  avail:"Available in",incl:"What's included",ask:"Get a quote for this service",q_sec_you:"Your details",q_sec_route:"Route",q_sec_dates:"Dates",q_sec_cargo:"Cargo",q_sec_more:"Anything else",q_pc:"Pick-up country",q_ctry1:"Country",q_emi:"Delivery emirate",q_area:"Delivery area",q_area0:"Choose an area (optional)",q_nores:"No matches yet. Keep typing, or tap the map.",q_dc:"Delivery country",q_pp:"Pick-up point",q_dsl:"Building, hotel, street or warehouse",q_ds_ph:"Start typing: warehouse, hotel, building or street",q_find:"Find",q_pin_pu:"Set pick-up",q_pin_de:"Set delivery",q_maphint:"Tap the map to drop the pin. You can drag pins to adjust.",q_km:"Road distance",q_time:"Driving time",q_from:"From",q_to:"To",q_d1:"Collect from (earliest)",q_d2:"Deliver by (latest)",q_ct:"Container / vehicle",q_qty:"How many",q_temp:"Temperature",q_tc_ph:"Required temperature, e.g. +15 °C",q_wt:"Weight per container (tonnes)",q_goods:"What is the cargo?",q_goods_ph:"e.g. tiles, frozen chicken, machinery",q_cust:"Customs status",q_dg:"Dangerous goods?",q_unl:"I need help with loading or unloading",q_other_pt:"Other address (drop a pin on the map)",q_calc:"Calculating…",q_approx:"approx.",q_notfound:"Address not found. Try a nearby landmark or drop the pin on the map.",q_need_route:"Please set both the pick-up and the delivery point on the map.",q_need_basic:"Please fill in your name, email and phone.",q_pinned:"Pinned location",routes:"Ports and routes we cover",qi_k:"Get a quote in 2 minutes",qi_co:"Servicios Ma&Ye has moved cargo for international hotel brands and businesses since 2014. Tell us the route and the cargo below and we will reply with a price and a truck schedule.",qi_t1:"Since 2014",qi_t2:"Door to door",qi_t3:"Photo proof of delivery",qi_t4:"One invoice",ready:"What to have ready",how:"How it works",faq:"Questions clients ask"},
+  avail:"Available in",incl:"What's included",ask:"Get a quote for this service",q_sec_you:"Your details",q_sec_route:"Route",q_sec_dates:"Dates",q_sec_cargo:"Cargo",q_sec_more:"Anything else",q_pc:"Pick-up country",q_ctry1:"Country",q_emi:"Delivery emirate",q_area:"Delivery area",q_area0:"Choose an area (optional)",q_nores:"No matches yet. Keep typing, or tap the map.",q_dc:"Delivery country",q_pp:"Port or terminal",q_dsl:"Building, hotel, street or warehouse",q_ds_ph:"Start typing: warehouse, hotel, building or street",q_find:"Find",q_pin_pu:"Set pick-up",q_leg_pu:"Pick-up",q_leg_de:"Delivery",q_notset:"Not set yet",q_psl:"Or type an address",q_onmap:"Pick on map",q_hint_pu:"Tap the map to place the PICK-UP point",q_hint_de:"Tap the map to place the DELIVERY point",q_hint0:"Choose a port or type an address, or use \"Pick on map\". You can drag the pins to adjust.",q_pin_de:"Set delivery",q_maphint:"Tap the map to drop the pin. You can drag pins to adjust.",q_km:"Road distance",q_time:"Driving time",q_from:"From",q_to:"To",q_d1:"Collect from (earliest)",q_d2:"Deliver by (latest)",q_ct:"Container / vehicle",q_qty:"How many",q_temp:"Temperature",q_tc_ph:"Required temperature, e.g. +15 °C",q_wt:"Weight per container (tonnes)",q_goods:"What is the cargo?",q_goods_ph:"e.g. tiles, frozen chicken, machinery",q_cust:"Customs status",q_dg:"Dangerous goods?",q_unl:"I need help with loading or unloading",q_other_pt:"Another address",q_calc:"Calculating…",q_approx:"approx.",q_notfound:"Address not found. Try a nearby landmark or drop the pin on the map.",q_need_route:"Please set both the pick-up and the delivery point on the map.",q_need_basic:"Please fill in your name, email and phone.",q_pinned:"Pinned location",routes:"Ports and routes we cover",qi_k:"Get a quote in 2 minutes",qi_co:"Servicios Ma&Ye has moved cargo for international hotel brands and businesses since 2014. Tell us the route and the cargo below and we will reply with a price and a truck schedule.",qi_t1:"Since 2014",qi_t2:"Door to door",qi_t3:"Photo proof of delivery",qi_t4:"One invoice",ready:"What to have ready",how:"How it works",faq:"Questions clients ask"},
  es:{nav_services:"Servicios",nav_ind:"Industrias",nav_about:"Nosotros",nav_blog:"Blog",nav_loc:"Ubicaciones",cta_quote:"Pedir cotización",
   hero_k:"Transporte · Logística · Suministro",hero_h:"Movemos lo que mantiene tu negocio <em>en marcha</em>.",hero_p:"Carga, cadena de frío, transporte de personal, almacenaje y suministro, gestionados de principio a fin por un solo equipo. Desde 2014.",hero_see:"Ver todos los servicios",
   pick_h:"¿Qué necesitas mover?",pick_p:"Elige un servicio y pide tu cotización en minutos.",pick_other:"Otra cosa",
@@ -555,7 +580,7 @@ var I = {
   fi_h:"¿Listo para mover?",fi_p:"Cuéntanos qué necesitas y te enviaremos una propuesta.",
   f_tag:"Transporte, logística y suministro desde 2014.",f_co:"Empresa",f_ct:"Contacto",f_c:"Cuba · Emiratos Árabes Unidos · Panamá · República Dominicana",
   q_h:"Pedir cotización",q_p:"Déjanos tus datos y te contactaremos con una propuesta.",q_name:"Nombre",q_co:"Empresa",q_ph:"Teléfono / WhatsApp",q_srv:"Servicio",q_ctry:"País",q_notes:"Notas: añade contexto o más información",q_notes_ph:"¿Qué necesitas? Origen, destino, fechas, volumen, temperatura, número de pasajeros...",q_send:"Enviar solicitud",q_note:"Sin compromiso. Solo usamos tus datos para responderte.",q_sending:"Enviando...",q_ok_h:"¡Gracias!",q_ok_p:"Hemos recibido tu solicitud y te contactaremos pronto.",q_close:"Cerrar",q_other:"Otro / no estoy seguro",
-  avail:"Disponible en",incl:"Qué incluye",ask:"Pedir cotización de este servicio",q_sec_you:"Tus datos",q_sec_route:"Ruta",q_sec_dates:"Fechas",q_sec_cargo:"Carga",q_sec_more:"Algo más",q_pc:"País de recogida",q_ctry1:"País",q_emi:"Emirato de entrega",q_area:"Zona de entrega",q_area0:"Elige una zona (opcional)",q_nores:"Aún no hay resultados. Sigue escribiendo o toca el mapa.",q_dc:"País de entrega",q_pp:"Punto de recogida",q_dsl:"Edificio, hotel, calle o almacén",q_ds_ph:"Escribe: almacén, hotel, edificio o calle",q_find:"Buscar",q_pin_pu:"Marcar recogida",q_pin_de:"Marcar entrega",q_maphint:"Toca el mapa para poner el pin. Puedes arrastrarlo para ajustar.",q_km:"Distancia por carretera",q_time:"Tiempo de viaje",q_from:"Desde",q_to:"Hasta",q_d1:"Recoger desde (fecha más temprana)",q_d2:"Entregar antes de (fecha límite)",q_ct:"Contenedor / vehículo",q_qty:"Cantidad",q_temp:"Temperatura",q_tc_ph:"Temperatura requerida, ej. +15 °C",q_wt:"Peso por contenedor (toneladas)",q_goods:"¿Qué carga es?",q_goods_ph:"ej. azulejos, pollo congelado, maquinaria",q_cust:"Estado de aduana",q_dg:"¿Mercancía peligrosa?",q_unl:"Necesito ayuda para cargar o descargar",q_other_pt:"Otra dirección (pon un pin en el mapa)",q_calc:"Calculando…",q_approx:"aprox.",q_notfound:"No encontramos la dirección. Prueba con un lugar cercano o pon el pin en el mapa.",q_need_route:"Marca en el mapa el punto de recogida y el de entrega.",q_need_basic:"Completa tu nombre, email y teléfono.",q_pinned:"Ubicación marcada",routes:"Puertos y rutas que cubrimos",qi_k:"Cotiza en 2 minutos",qi_co:"Servicios Ma&Ye mueve carga para cadenas hoteleras internacionales y empresas desde 2014. Indícanos la ruta y la carga aquí abajo y te respondemos con el precio y el horario del camión.",qi_t1:"Desde 2014",qi_t2:"Puerta a puerta",qi_t3:"Foto de la entrega",qi_t4:"Una sola factura",ready:"Qué tener listo",how:"Cómo funciona",faq:"Preguntas frecuentes"}
+  avail:"Disponible en",incl:"Qué incluye",ask:"Pedir cotización de este servicio",q_sec_you:"Tus datos",q_sec_route:"Ruta",q_sec_dates:"Fechas",q_sec_cargo:"Carga",q_sec_more:"Algo más",q_pc:"País de recogida",q_ctry1:"País",q_emi:"Emirato de entrega",q_area:"Zona de entrega",q_area0:"Elige una zona (opcional)",q_nores:"Aún no hay resultados. Sigue escribiendo o toca el mapa.",q_dc:"País de entrega",q_pp:"Puerto o terminal",q_dsl:"Edificio, hotel, calle o almacén",q_ds_ph:"Escribe: almacén, hotel, edificio o calle",q_find:"Buscar",q_pin_pu:"Marcar recogida",q_leg_pu:"Recogida",q_leg_de:"Entrega",q_notset:"Aún sin marcar",q_psl:"O escribe una dirección",q_onmap:"Marcar en el mapa",q_hint_pu:"Toca el mapa para marcar el punto de RECOGIDA",q_hint_de:"Toca el mapa para marcar el punto de ENTREGA",q_hint0:"Elige un puerto o escribe una dirección, o usa \"Marcar en el mapa\". Puedes arrastrar los pines para ajustar.",q_pin_de:"Marcar entrega",q_maphint:"Toca el mapa para poner el pin. Puedes arrastrarlo para ajustar.",q_km:"Distancia por carretera",q_time:"Tiempo de viaje",q_from:"Desde",q_to:"Hasta",q_d1:"Recoger desde (fecha más temprana)",q_d2:"Entregar antes de (fecha límite)",q_ct:"Contenedor / vehículo",q_qty:"Cantidad",q_temp:"Temperatura",q_tc_ph:"Temperatura requerida, ej. +15 °C",q_wt:"Peso por contenedor (toneladas)",q_goods:"¿Qué carga es?",q_goods_ph:"ej. azulejos, pollo congelado, maquinaria",q_cust:"Estado de aduana",q_dg:"¿Mercancía peligrosa?",q_unl:"Necesito ayuda para cargar o descargar",q_other_pt:"Otra dirección",q_calc:"Calculando…",q_approx:"aprox.",q_notfound:"No encontramos la dirección. Prueba con un lugar cercano o pon el pin en el mapa.",q_need_route:"Marca en el mapa el punto de recogida y el de entrega.",q_need_basic:"Completa tu nombre, email y teléfono.",q_pinned:"Ubicación marcada",routes:"Puertos y rutas que cubrimos",qi_k:"Cotiza en 2 minutos",qi_co:"Servicios Ma&Ye mueve carga para cadenas hoteleras internacionales y empresas desde 2014. Indícanos la ruta y la carga aquí abajo y te respondemos con el precio y el horario del camión.",qi_t1:"Desde 2014",qi_t2:"Puerta a puerta",qi_t3:"Foto de la entrega",qi_t4:"Una sola factura",ready:"Qué tener listo",how:"Cómo funciona",faq:"Preguntas frecuentes"}
 };
 var CATS = {transport:{en:"Transport",es:"Transporte"},logistics:{en:"Logistics",es:"Logística"},trade:{en:"Trade & supply",es:"Comercio y suministro"},mobility:{en:"Mobility",es:"Movilidad"}};
 var CTRY = {CU:{en:"Cuba",es:"Cuba"},AE:{en:"United Arab Emirates",es:"Emiratos Árabes Unidos"},PA:{en:"Panama",es:"Panamá"},DO:{en:"Dominican Republic",es:"República Dominicana"}};
@@ -810,7 +835,7 @@ function sendQuote(e){
 }
 
 /* ---------- detailed shipping quote ---------- */
-var MAP = null, PINS = {pu:null, de:null}, MK = {pu:null, de:null}, ROUTE = null, PINMODE = 'pu', TEMP = 0, routeTimer = null;
+var MAP = null, PINS = {pu:null, de:null}, MK = {pu:null, de:null}, ROUTE = null, PINMODE = null, TEMP = 0, routeTimer = null;
 function opts(arr, sel){ return arr.map(function(t,i){ return '<option value="'+i+'"'+(i==sel?' selected':'')+'>'+t+'</option>' }).join('') }
 function renderShipSelects(){
   var pc = document.getElementById('q_pc'); if (!pc) return;
@@ -857,9 +882,23 @@ function initMap(){
   if (MAP) { MAP.invalidateSize(); return; }
   MAP = L_.map('qmap', {scrollWheelZoom:false}).setView(GEO.AE.c, 7);
   L_.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}).addTo(MAP);
-  MAP.on('click', function(e){ setPin(PINMODE, e.latlng.lat, e.latlng.lng, null); if (PINMODE==='pu') { document.getElementById('q_pp').value='map'; setPinMode('de'); } });
+  MAP.on('click', function(e){
+    var k = PINMODE || (!PINS.pu ? 'pu' : (!PINS.de ? 'de' : null));
+    if (!k) { var h = document.getElementById('q_maphint'); h.classList.add('act'); setTimeout(function(){ if (!PINMODE) h.classList.remove('act') }, 1800); return; }
+    setPin(k, e.latlng.lat, e.latlng.lng, null);
+    if (k==='pu') document.getElementById('q_pp').value = 'map';
+    if (PINMODE) mapMode(PINMODE);
+  });
 }
-function setPinMode(k){ PINMODE = k; document.getElementById('mt-pu').classList.toggle('on', k==='pu'); document.getElementById('mt-de').classList.toggle('on', k==='de'); }
+function setPinMode(k){ /* kept for compatibility: pins never switch automatically */ }
+function mapMode(k){
+  PINMODE = (PINMODE === k) ? null : k;
+  ['pu','de'].forEach(function(x){ var b = document.getElementById('mb-'+x); if (b) b.classList.toggle('on', PINMODE === x); });
+  var h = document.getElementById('q_maphint');
+  h.textContent = PINMODE ? tr(PINMODE==='pu' ? 'q_hint_pu' : 'q_hint_de') : tr('q_hint0');
+  h.classList.toggle('act', !!PINMODE);
+  if (PINMODE) { initMap(); document.getElementById('qmap').scrollIntoView({behavior:'smooth', block:'center'}); }
+}
 function setPin(k, lat, lng, name){
   if (!MAP) initMap(); if (!MAP) return;
   PINS[k] = {lat:lat, lng:lng, name: name || (tr('q_pinned')+' '+lat.toFixed(4)+', '+lng.toFixed(4))};
@@ -868,87 +907,99 @@ function setPin(k, lat, lng, name){
     MK[k].on('dragend', function(ev){ var p = ev.target.getLatLng(); setPin(k, p.lat, p.lng, null); if (k==='pu') document.getElementById('q_pp').value='map'; });
   }
   document.getElementById(k==='pu'?'q_fromv':'q_tov').textContent = PINS[k].name.split(',')[0];
+  legStatus(k);
   if (!name) reverseName(k, lat, lng);
   fitPins(); scheduleRoute();
 }
 function fitPins(){ var pts = ['pu','de'].filter(function(k){return PINS[k]}).map(function(k){return [PINS[k].lat,PINS[k].lng]}); if (pts.length===2) MAP.fitBounds(pts, {padding:[40,40]}); else if (pts.length===1) MAP.setView(pts[0], 11); }
+function legStatus(k){
+  var leg = document.getElementById('leg-'+k), v = document.getElementById(k==='pu'?'q_puval':'q_deval');
+  if (!leg || !v) return;
+  if (PINS[k]) { leg.classList.add('set'); v.removeAttribute('data-i'); v.textContent = PINS[k].name.split(',').slice(0,2).join(','); v.title = PINS[k].name; }
+}
 function pickPort(){
   var pc = document.getElementById('q_pc').value, v = document.getElementById('q_pp').value;
   if (v==='' ) return;
-  if (v==='map') { setPinMode('pu'); return; }
-  var p = GEO[pc].ports[+v]; setPin('pu', p[1], p[2], p[0]); setPinMode('de');
+  if (v==='map') { document.getElementById('q_ps').focus(); return; }
+  var p = GEO[pc].ports[+v]; document.getElementById('q_ps').value = ''; setPin('pu', p[1], p[2], p[0]);
 }
 function fillAreas(move){
   var e = EMIRATES[+document.getElementById('q_emi').value || 0], a = document.getElementById('q_area'), v = a.value;
   a.innerHTML = '<option value="">'+tr('q_area0')+'</option>' + e[3].map(function(x,i){ return '<option value="'+i+'">'+x[0]+'</option>' }).join('');
   if (!move && v) a.value = v;
-  if (move && MAP) { MAP.setView([e[1],e[2]], 11); setPinMode('de'); }
+  if (move && MAP) { MAP.setView([e[1],e[2]], 11); }
 }
 function pickArea(){
   var e = EMIRATES[+document.getElementById('q_emi').value || 0], v = document.getElementById('q_area').value;
   if (v==='' || !MAP) return;
-  var x = e[3][+v]; MAP.setView([x[1],x[2]], 14); setPinMode('de');
+  var x = e[3][+v]; MAP.setView([x[1],x[2]], 14);
   document.getElementById('q_ds').focus();
 }
-var UAE_BBOX = '51.5,22.5,56.5,26.3', sugTimer = null, sugSeq = 0, sugItems = [], sugIdx = -1;
-function sugBias(){
-  var e = EMIRATES[+document.getElementById('q_emi').value || 0], v = document.getElementById('q_area').value;
-  var x = v!=='' ? e[3][+v] : [e[0],e[1],e[2]];
-  return {lat:x[1], lon:x[2], ctx: (v!=='' ? x[0]+', ' : '') + e[0]};
-}
+var UAE_BBOX = '51.5,22.5,56.5,26.3';
 function esc(t){ return String(t||'').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] }) }
-function showSug(list){
-  var box = document.getElementById('q_sug'), inp = document.getElementById('q_ds');
-  if (!list) { box.hidden = true; inp.setAttribute('aria-expanded','false'); return; }
-  sugItems = list; sugIdx = -1;
-  box.innerHTML = list.length ? list.map(function(it,i){ return '<button type="button" role="option" data-n="'+i+'"><b>'+esc(it.title)+'</b><small>'+esc(it.sub)+'</small></button>' }).join('') : '<div class="none">'+tr('q_nores')+'</div>';
-  box.querySelectorAll('button').forEach(function(b){ b.addEventListener('mousedown', function(ev){ ev.preventDefault(); chooseSug(+b.getAttribute('data-n')) }) });
-  box.hidden = false; inp.setAttribute('aria-expanded','true');
+function biasFor(k){
+  if (k === 'pu') {
+    var v = document.getElementById('q_pp').value, pc = document.getElementById('q_pc').value || 'AE';
+    if (v !== '' && v !== 'map') { var p = GEO[pc].ports[+v]; return {lat:p[1], lon:p[2], ctx:'United Arab Emirates'}; }
+    return {lat:25.2, lon:55.27, ctx:'United Arab Emirates'};
+  }
+  var e = EMIRATES[+document.getElementById('q_emi').value || 0], a = document.getElementById('q_area').value;
+  var x = a !== '' ? e[3][+a] : [e[0], e[1], e[2]];
+  return {lat:x[1], lon:x[2], ctx:(a !== '' ? x[0]+', ' : '') + e[0]};
 }
-function chooseSug(i){
-  var it = sugItems[i]; if (!it) return;
-  document.getElementById('q_ds').value = it.title;
-  showSug(null);
-  setPin('de', it.lat, it.lon, it.title + (it.sub ? ', '+it.sub : ''));
-}
-function fetchSug(q){
-  var b = sugBias(), seq = ++sugSeq;
-  fetch('https://photon.komoot.io/api/?limit=10&lang=en&bbox='+UAE_BBOX+'&lat='+b.lat+'&lon='+b.lon+'&q='+encodeURIComponent(q))
-    .then(function(r){ if(!r.ok) throw 0; return r.json() })
-    .then(function(j){
-      if (seq !== sugSeq) return;
-      var list = (j.features||[]).map(function(f){ var p=f.properties||{}, c=f.geometry.coordinates;
-        var title = p.name || [p.housenumber, p.street].filter(Boolean).join(' ') || p.district || p.city || q;
-        var sub = [p.street && p.name ? p.street : '', p.district, p.locality, p.city || p.county, p.state].filter(function(x,i,a){ return x && a.indexOf(x)===i && x!==title }).join(', ');
-        return {title:title, sub:sub, lat:c[1], lon:c[0]}; });
-      if (!list.length) nominatimSug(q, seq); else showSug(list);
-    })
-    .catch(function(){ if (seq === sugSeq) nominatimSug(q, seq); });
-}
-function nominatimSug(q, seq){
-  var b = sugBias();
-  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=8&countrycodes=ae&accept-language='+L+'&q='+encodeURIComponent(q+', '+b.ctx))
-    .then(function(r){ return r.json() }).then(function(a){
-      if (seq !== sugSeq) return;
-      showSug((a||[]).map(function(x){ var parts = x.display_name.split(', '); return {title:parts[0], sub:parts.slice(1,4).join(', '), lat:+x.lat, lon:+x.lon} }));
-    }).catch(function(){ if (seq === sugSeq) showSug([]); });
-}
-function findAddr(){
-  var q = val('q_ds'); if (q.length < 2) return;
-  clearTimeout(sugTimer); fetchSug(q);
-}
-(function(){
-  var inp = document.getElementById('q_ds'); if (!inp) return;
-  inp.addEventListener('input', function(){ clearTimeout(sugTimer); var q = inp.value.trim(); if (q.length < 3) { showSug(null); return; } sugTimer = setTimeout(function(){ fetchSug(q) }, 350); });
-  inp.addEventListener('focus', function(){ if (sugItems.length && inp.value.trim().length >= 3) showSug(sugItems); });
-  inp.addEventListener('blur', function(){ setTimeout(function(){ showSug(null) }, 150); });
+var AC = {};
+function makeAC(k, inputId, boxId){
+  var st = {timer:null, seq:0, items:[], idx:-1}, inp = document.getElementById(inputId), box = document.getElementById(boxId);
+  if (!inp) return; AC[k] = st;
+  function show(list){
+    if (!list) { box.hidden = true; inp.setAttribute('aria-expanded','false'); return; }
+    st.items = list; st.idx = -1;
+    box.innerHTML = list.length ? list.map(function(it,i){ return '<button type="button" role="option" data-n="'+i+'"><b>'+esc(it.title)+'</b><small>'+esc(it.sub)+'</small></button>' }).join('') : '<div class="none">'+tr('q_nores')+'</div>';
+    box.querySelectorAll('button').forEach(function(b){ b.addEventListener('mousedown', function(ev){ ev.preventDefault(); choose(+b.getAttribute('data-n')) }) });
+    box.hidden = false; inp.setAttribute('aria-expanded','true');
+  }
+  function choose(i){
+    var it = st.items[i]; if (!it) return;
+    inp.value = it.title; show(null);
+    if (k === 'pu') document.getElementById('q_pp').value = 'map';
+    setPin(k, it.lat, it.lon, it.title + (it.sub ? ', '+it.sub : ''));
+  }
+  function nomi(q, seq){
+    var b = biasFor(k);
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=8&countrycodes=ae&accept-language='+L+'&q='+encodeURIComponent(q+', '+b.ctx))
+      .then(function(r){ return r.json() }).then(function(a){
+        if (seq !== st.seq) return;
+        show((a||[]).map(function(x){ var parts = x.display_name.split(', '); return {title:parts[0], sub:parts.slice(1,4).join(', '), lat:+x.lat, lon:+x.lon} }));
+      }).catch(function(){ if (seq === st.seq) show([]); });
+  }
+  function search(q){
+    var b = biasFor(k), seq = ++st.seq;
+    fetch('https://photon.komoot.io/api/?limit=10&lang=en&bbox='+UAE_BBOX+'&lat='+b.lat+'&lon='+b.lon+'&q='+encodeURIComponent(q))
+      .then(function(r){ if(!r.ok) throw 0; return r.json() })
+      .then(function(j){
+        if (seq !== st.seq) return;
+        var list = (j.features||[]).map(function(f){ var p=f.properties||{}, c=f.geometry.coordinates;
+          var title = p.name || [p.housenumber, p.street].filter(Boolean).join(' ') || p.district || p.city || q;
+          var sub = [p.street && p.name ? p.street : '', p.district, p.locality, p.city || p.county, p.state].filter(function(x,i,a){ return x && a.indexOf(x)===i && x!==title }).join(', ');
+          return {title:title, sub:sub, lat:c[1], lon:c[0]}; });
+        if (!list.length) nomi(q, seq); else show(list);
+      })
+      .catch(function(){ if (seq === st.seq) nomi(q, seq); });
+  }
+  st.search = search;
+  inp.addEventListener('input', function(){ clearTimeout(st.timer); var q = inp.value.trim(); if (q.length < 3) { show(null); return; } st.timer = setTimeout(function(){ search(q) }, 350); });
+  inp.addEventListener('focus', function(){ if (st.items.length && inp.value.trim().length >= 3) show(st.items); });
+  inp.addEventListener('blur', function(){ setTimeout(function(){ show(null) }, 150); });
   inp.addEventListener('keydown', function(e){
-    var box = document.getElementById('q_sug'), btns = box.querySelectorAll('button');
-    if (e.key==='ArrowDown' || e.key==='ArrowUp') { if (!btns.length) return; e.preventDefault(); sugIdx = (sugIdx + (e.key==='ArrowDown'?1:-1) + btns.length) % btns.length; btns.forEach(function(b,i){ b.classList.toggle('on', i===sugIdx) }); }
-    else if (e.key==='Enter') { e.preventDefault(); if (sugIdx>=0) chooseSug(sugIdx); else if (sugItems.length && !box.hidden) chooseSug(0); else findAddr(); }
-    else if (e.key==='Escape') { showSug(null); }
+    var btns = box.querySelectorAll('button');
+    if (e.key==='ArrowDown' || e.key==='ArrowUp') { if (!btns.length) return; e.preventDefault(); st.idx = (st.idx + (e.key==='ArrowDown'?1:-1) + btns.length) % btns.length; btns.forEach(function(b,i){ b.classList.toggle('on', i===st.idx) }); }
+    else if (e.key==='Enter') { e.preventDefault(); if (st.idx>=0) choose(st.idx); else if (st.items.length && !box.hidden) choose(0); else if (inp.value.trim().length>=2) search(inp.value.trim()); }
+    else if (e.key==='Escape') { show(null); }
   });
-})();
+}
+function findAddr(){ var q = val('q_ds'); if (q.length >= 2 && AC.de) AC.de.search(q); }
+makeAC('pu', 'q_ps', 'q_psug');
+makeAC('de', 'q_ds', 'q_sug');
 function alertErr(m){ var e=document.getElementById('q_err'); e.textContent=m; e.hidden=false; setTimeout(function(){e.hidden=true}, 6000); }
 var revTimer = {};
 function reverseName(k, lat, lng){
@@ -956,7 +1007,7 @@ function reverseName(k, lat, lng){
   revTimer[k] = setTimeout(function(){
     fetch('https://nominatim.openstreetmap.org/reverse?format=json&zoom=16&accept-language='+L+'&lat='+lat+'&lon='+lng)
       .then(function(r){return r.json()}).then(function(a){
-        if (a && a.display_name && PINS[k] && PINS[k].lat===lat) { PINS[k].name = a.display_name; document.getElementById(k==='pu'?'q_fromv':'q_tov').textContent = a.display_name.split(',')[0]; }
+        if (a && a.display_name && PINS[k] && PINS[k].lat===lat) { PINS[k].name = a.display_name; document.getElementById(k==='pu'?'q_fromv':'q_tov').textContent = a.display_name.split(',')[0]; legStatus(k); }
       }).catch(function(){});
   }, 1100);
 }
