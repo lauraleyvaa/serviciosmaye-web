@@ -191,6 +191,40 @@ body.mo .fab,body.mo .mbar{display:none!important}
 .art p{margin-bottom:14px;font-size:15.5px;color:#333}
 .art h4{font-size:17px;margin:20px 0 8px;letter-spacing:0;text-transform:none;color:var(--ink)}
 
+/* detailed quote */
+.md.wide{max-width:800px}
+.fsec{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--red);margin:26px 0 12px;padding-top:18px;border-top:1px solid var(--line)}
+.fsec:first-of-type{border-top:0;padding-top:0;margin-top:4px}
+.srch{display:flex;gap:6px}.srch input{flex:1;min-width:0}.srch .btn{padding:10px 14px;font-size:13px}
+.maptools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.mt{border:1.5px solid var(--line);background:#fff;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.mt i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.mt.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.mt .pu{background:var(--red)}.mt .de{background:#2A6BD1}
+.hint{font-size:12.5px;color:var(--grey)}
+#qmap{height:300px;border:1px solid var(--line);background:var(--soft)}
+.dist{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-top:0}
+.dist div{background:#fff;padding:10px 12px;min-width:0}
+.dist span{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700}
+.dist b{display:block;font-size:15px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dist .km b{font-size:22px;color:var(--red)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--line);background:var(--soft);padding:10px 12px;font-size:13.5px;font-weight:600;cursor:pointer}
+.seg button.on{border-color:var(--red);background:#fff;color:var(--red)}
+.chk{display:flex;gap:10px;align-items:center;text-transform:none!important;letter-spacing:0!important;font-size:14.5px!important;color:var(--ink)!important;font-weight:500!important;cursor:pointer}
+.chk input{width:18px!important;height:18px;accent-color:var(--red)}
+.err{color:var(--red);font-size:13.5px;font-weight:600;margin-top:10px}
+.pin{width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.pin.pu{background:#D7261E}.pin.de{background:#2A6BD1}
+.det .ports{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 18px}
+.det .ports span{font-size:12.5px;font-weight:600;padding:6px 10px;border:1px solid var(--line)}
+.det ol{margin:10px 0 18px 18px}.det ol li{padding:5px 0;font-size:15px}
+.faq{border-top:1px solid var(--line);margin-top:6px}
+.faq details{border-bottom:1px solid var(--line);padding:12px 0}
+.faq summary{font-weight:600;cursor:pointer;font-size:15px}
+.faq p{color:var(--grey);font-size:14.5px;margin-top:8px}
+@media (max-width:560px){.dist{grid-template-columns:1fr 1fr}#qmap{height:260px}}
+
 /* reveal */
 .rv{opacity:0;transform:translateY(18px);transition:.6s ease}
 .rv.in{opacity:1;transform:none}
@@ -228,6 +262,9 @@ body.mo .fab,body.mo .mbar{display:none!important}
   .md .in{padding:26px 20px}
 }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>window.LEAF = window.L;</script>
 </head>
 <body>
 
@@ -387,21 +424,65 @@ body.mo .fab,body.mo .mbar{display:none!important}
 
 <!-- quote modal -->
 <div class="ov" id="qov" onclick="if(event.target===this)closeM('qov')">
-  <div class="md" role="dialog" aria-modal="true">
+  <div class="md wide" role="dialog" aria-modal="true">
     <button class="x" onclick="closeM('qov')" aria-label="Close">×</button>
     <div class="in" id="qin">
       <h3 data-i="q_h">Get a quote</h3>
       <p class="lead" data-i="q_p">Leave your details and we will contact you with a proposal.</p>
-      <form id="qform" onsubmit="return sendQuote(event)">
+      <form id="qform" onsubmit="return sendQuote(event)" novalidate>
+        <div class="fsec" data-i="q_sec_you">Your details</div>
         <div class="fg">
-          <div><label data-i="q_name">Name</label><input name="name" required></div>
-          <div><label data-i="q_co">Company</label><input name="company"></div>
-          <div><label>Email</label><input name="email" type="email" required></div>
-          <div><label data-i="q_ph">Phone / WhatsApp</label><input name="phone" type="tel" required></div>
-          <div><label data-i="q_srv">Service</label><select name="service" id="qsrv"></select></div>
-          <div><label data-i="q_ctry">Country</label><select name="country" id="qctry"></select></div>
-          <div class="full"><label data-i="q_notes">Notes: add context or more information</label><textarea name="notes" data-ph="q_notes_ph" placeholder="What do you need? Origin, destination, dates, volume, temperature, number of passengers..."></textarea></div>
+          <div><label for="q_name" data-i="q_name">Name</label><input id="q_name" name="name" required autocomplete="name"></div>
+          <div><label for="q_co" data-i="q_co">Company</label><input id="q_co" name="company" autocomplete="organization"></div>
+          <div><label for="q_em">Email</label><input id="q_em" name="email" type="email" required autocomplete="email"></div>
+          <div><label for="q_phn" data-i="q_ph">Phone / WhatsApp</label><input id="q_phn" name="phone" type="tel" required autocomplete="tel"></div>
+          <div><label for="qsrv" data-i="q_srv">Service</label><select name="service" id="qsrv" onchange="toggleShip()"></select></div>
+          <div id="genCtry"><label for="qctry" data-i="q_ctry">Country</label><select name="country" id="qctry"></select></div>
         </div>
+        <div id="ship" hidden>
+          <div class="fsec" data-i="q_sec_route">Route</div>
+          <div class="fg">
+            <div><label for="q_pc" data-i="q_pc">Pick-up country</label><select id="q_pc" onchange="fillPorts();"></select></div>
+            <div><label for="q_dc" data-i="q_dc">Delivery country</label><select id="q_dc"></select></div>
+            <div><label for="q_pp" data-i="q_pp">Pick-up point</label><select id="q_pp" onchange="pickPort()"></select></div>
+            <div><label for="q_ds" data-i="q_dsl">Find the delivery address</label><div class="srch"><input id="q_ds" data-ph="q_ds_ph" placeholder="Warehouse name, area or street"><button type="button" class="btn btn-dark" onclick="findAddr()" data-i="q_find">Find</button></div></div>
+            <div class="full">
+              <div class="maptools">
+                <button type="button" class="mt on" id="mt-pu" onclick="setPinMode('pu')"><i class="pu"></i><span data-i="q_pin_pu">Set pick-up</span></button>
+                <button type="button" class="mt" id="mt-de" onclick="setPinMode('de')"><i class="de"></i><span data-i="q_pin_de">Set delivery</span></button>
+                <span class="hint" data-i="q_maphint">Tap the map to drop the pin. You can drag pins to adjust.</span>
+              </div>
+              <div id="qmap" role="application" aria-label="Map"></div>
+              <div class="dist">
+                <div class="km"><span data-i="q_km">Road distance</span><b id="q_kmv">–</b></div>
+                <div><span data-i="q_time">Driving time</span><b id="q_tv">–</b></div>
+                <div><span data-i="q_from">From</span><b id="q_fromv">–</b></div>
+                <div><span data-i="q_to">To</span><b id="q_tov">–</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="fsec" data-i="q_sec_dates">Dates</div>
+          <div class="fg">
+            <div><label for="q_d1" data-i="q_d1">Collect from (earliest)</label><input type="date" id="q_d1"></div>
+            <div><label for="q_d2" data-i="q_d2">Deliver by (latest)</label><input type="date" id="q_d2"></div>
+          </div>
+          <div class="fsec" data-i="q_sec_cargo">Cargo</div>
+          <div class="fg">
+            <div><label for="q_ct" data-i="q_ct">Container / vehicle</label><select id="q_ct"></select></div>
+            <div><label for="q_qty" data-i="q_qty">How many</label><input type="number" id="q_qty" min="1" value="1" inputmode="numeric"></div>
+            <div class="full"><label data-i="q_temp">Temperature</label><div class="seg" id="q_temp"></div><input id="q_tc" type="text" data-ph="q_tc_ph" placeholder="Required temperature, e.g. +15 °C" style="margin-top:8px" hidden></div>
+            <div><label for="q_wt" data-i="q_wt">Weight per container (tonnes)</label><input type="number" id="q_wt" min="0" step="0.1" inputmode="decimal"></div>
+            <div><label for="q_goods" data-i="q_goods">What is the cargo?</label><input id="q_goods" data-ph="q_goods_ph" placeholder="e.g. tiles, frozen chicken, machinery"></div>
+            <div><label for="q_cust" data-i="q_cust">Customs status</label><select id="q_cust"></select></div>
+            <div><label for="q_dg" data-i="q_dg">Dangerous goods?</label><select id="q_dg"></select></div>
+            <div class="full"><label class="chk"><input type="checkbox" id="q_unl"><span data-i="q_unl">I need help with loading or unloading</span></label></div>
+          </div>
+          <div class="fsec" data-i="q_sec_more">Anything else</div>
+        </div>
+        <div class="fg">
+          <div class="full"><label for="q_notes" data-i="q_notes">Notes: add context or more information</label><textarea id="q_notes" name="notes" data-ph="q_notes_ph" placeholder="What do you need? Origin, destination, dates, volume, temperature, number of passengers..."></textarea></div>
+        </div>
+        <div class="err" id="q_err" hidden></div>
         <button class="btn btn-red arr" type="submit" id="qsend" data-i="q_send">Send request</button>
         <p class="note" data-i="q_note">No commitment. We only use your details to reply to you.</p>
       </form>
@@ -433,7 +514,7 @@ var I = {
   fi_h:"Ready to move?",fi_p:"Tell us what you need and we will get back to you with a proposal.",
   f_tag:"Transport, logistics and supply since 2014.",f_co:"Company",f_ct:"Contact",f_c:"Cuba · United Arab Emirates · Panama · Dominican Republic",
   q_h:"Get a quote",q_p:"Leave your details and we will contact you with a proposal.",q_name:"Name",q_co:"Company",q_ph:"Phone / WhatsApp",q_srv:"Service",q_ctry:"Country",q_notes:"Notes: add context or more information",q_notes_ph:"What do you need? Origin, destination, dates, volume, temperature, number of passengers...",q_send:"Send request",q_note:"No commitment. We only use your details to reply to you.",q_sending:"Sending...",q_ok_h:"Thank you!",q_ok_p:"We have received your request and will contact you soon.",q_close:"Close",q_other:"Other / not sure",
-  avail:"Available in",incl:"What's included",ask:"Get a quote for this service"},
+  avail:"Available in",incl:"What's included",ask:"Get a quote for this service",q_sec_you:"Your details",q_sec_route:"Route",q_sec_dates:"Dates",q_sec_cargo:"Cargo",q_sec_more:"Anything else",q_pc:"Pick-up country",q_dc:"Delivery country",q_pp:"Pick-up point",q_dsl:"Find the delivery address",q_ds_ph:"Warehouse name, area or street",q_find:"Find",q_pin_pu:"Set pick-up",q_pin_de:"Set delivery",q_maphint:"Tap the map to drop the pin. You can drag pins to adjust.",q_km:"Road distance",q_time:"Driving time",q_from:"From",q_to:"To",q_d1:"Collect from (earliest)",q_d2:"Deliver by (latest)",q_ct:"Container / vehicle",q_qty:"How many",q_temp:"Temperature",q_tc_ph:"Required temperature, e.g. +15 °C",q_wt:"Weight per container (tonnes)",q_goods:"What is the cargo?",q_goods_ph:"e.g. tiles, frozen chicken, machinery",q_cust:"Customs status",q_dg:"Dangerous goods?",q_unl:"I need help with loading or unloading",q_other_pt:"Other address (drop a pin on the map)",q_calc:"Calculating…",q_approx:"approx.",q_notfound:"Address not found. Try a nearby landmark or drop the pin on the map.",q_need_route:"Please set both the pick-up and the delivery point on the map.",q_need_basic:"Please fill in your name, email and phone.",q_pinned:"Pinned location",routes:"Ports and routes we cover",ready:"What to have ready",how:"How it works",faq:"Questions clients ask"},
  es:{nav_services:"Servicios",nav_ind:"Industrias",nav_about:"Nosotros",nav_blog:"Blog",nav_loc:"Ubicaciones",cta_quote:"Pedir cotización",
   hero_k:"Transporte · Logística · Suministro",hero_h:"Movemos lo que mantiene tu negocio <em>en marcha</em>.",hero_p:"Carga, cadena de frío, transporte de personal, almacenaje y suministro, gestionados de principio a fin por un solo equipo. Desde 2014.",hero_see:"Ver todos los servicios",
   pick_h:"¿Qué necesitas mover?",pick_p:"Elige un servicio y pide tu cotización en minutos.",pick_other:"Otra cosa",
@@ -450,7 +531,7 @@ var I = {
   fi_h:"¿Listo para mover?",fi_p:"Cuéntanos qué necesitas y te enviaremos una propuesta.",
   f_tag:"Transporte, logística y suministro desde 2014.",f_co:"Empresa",f_ct:"Contacto",f_c:"Cuba · Emiratos Árabes Unidos · Panamá · República Dominicana",
   q_h:"Pedir cotización",q_p:"Déjanos tus datos y te contactaremos con una propuesta.",q_name:"Nombre",q_co:"Empresa",q_ph:"Teléfono / WhatsApp",q_srv:"Servicio",q_ctry:"País",q_notes:"Notas: añade contexto o más información",q_notes_ph:"¿Qué necesitas? Origen, destino, fechas, volumen, temperatura, número de pasajeros...",q_send:"Enviar solicitud",q_note:"Sin compromiso. Solo usamos tus datos para responderte.",q_sending:"Enviando...",q_ok_h:"¡Gracias!",q_ok_p:"Hemos recibido tu solicitud y te contactaremos pronto.",q_close:"Cerrar",q_other:"Otro / no estoy seguro",
-  avail:"Disponible en",incl:"Qué incluye",ask:"Pedir cotización de este servicio"}
+  avail:"Disponible en",incl:"Qué incluye",ask:"Pedir cotización de este servicio",q_sec_you:"Tus datos",q_sec_route:"Ruta",q_sec_dates:"Fechas",q_sec_cargo:"Carga",q_sec_more:"Algo más",q_pc:"País de recogida",q_dc:"País de entrega",q_pp:"Punto de recogida",q_dsl:"Busca la dirección de entrega",q_ds_ph:"Nombre del almacén, zona o calle",q_find:"Buscar",q_pin_pu:"Marcar recogida",q_pin_de:"Marcar entrega",q_maphint:"Toca el mapa para poner el pin. Puedes arrastrarlo para ajustar.",q_km:"Distancia por carretera",q_time:"Tiempo de viaje",q_from:"Desde",q_to:"Hasta",q_d1:"Recoger desde (fecha más temprana)",q_d2:"Entregar antes de (fecha límite)",q_ct:"Contenedor / vehículo",q_qty:"Cantidad",q_temp:"Temperatura",q_tc_ph:"Temperatura requerida, ej. +15 °C",q_wt:"Peso por contenedor (toneladas)",q_goods:"¿Qué carga es?",q_goods_ph:"ej. azulejos, pollo congelado, maquinaria",q_cust:"Estado de aduana",q_dg:"¿Mercancía peligrosa?",q_unl:"Necesito ayuda para cargar o descargar",q_other_pt:"Otra dirección (pon un pin en el mapa)",q_calc:"Calculando…",q_approx:"aprox.",q_notfound:"No encontramos la dirección. Prueba con un lugar cercano o pon el pin en el mapa.",q_need_route:"Marca en el mapa el punto de recogida y el de entrega.",q_need_basic:"Completa tu nombre, email y teléfono.",q_pinned:"Ubicación marcada",routes:"Puertos y rutas que cubrimos",ready:"Qué tener listo",how:"Cómo funciona",faq:"Preguntas frecuentes"}
 };
 var CATS = {transport:{en:"Transport",es:"Transporte"},logistics:{en:"Logistics",es:"Logística"},trade:{en:"Trade & supply",es:"Comercio y suministro"},mobility:{en:"Mobility",es:"Movilidad"}};
 var CTRY = {CU:{en:"Cuba",es:"Cuba"},AE:{en:"United Arab Emirates",es:"Emiratos Árabes Unidos"},PA:{en:"Panama",es:"Panamá"},DO:{en:"Dominican Republic",es:"República Dominicana"}};
@@ -542,6 +623,38 @@ var POSTS = [
    b:"<p>Un producto fresco empieza a perder calidad desde el momento en que se cosecha. Una buena cadena de frío frena ese proceso.</p><h4>Cinco reglas</h4><p>1. Enfriar el producto lo antes posible tras la cosecha.<br>2. Mantener la temperatura adecuada para cada producto: no todo va a la misma temperatura.<br>3. No romper la cadena: carga y descarga rápidas.<br>4. Separar productos que no viajan bien juntos.<br>5. Controlar la temperatura durante todo el viaje.</p><h4>Cómo ayudamos</h4><p>Con nosotros el transporte refrigerado y el almacenaje en frío funcionan como un solo servicio, para que tu producto llegue tan fresco como salió.</p>"}}
 ];
 
+var SHIP = {cargo:1, container:1, reefer:1, broker:1};
+var GEO = {
+ AE:{en:"United Arab Emirates",es:"Emiratos Árabes Unidos",cc:"ae",c:[24.4,54.5],ports:[["Jebel Ali Port, Dubai",25.0112,55.0614],["Jebel Ali Free Zone (JAFZA)",25.0006,55.1066],["Port Rashid, Dubai",25.2687,55.2777],["Khalifa Port, Abu Dhabi",24.8093,54.6447],["Zayed Port, Abu Dhabi",24.5243,54.3807],["Port Khalid, Sharjah",25.363,55.378],["Khorfakkan Port",25.3483,56.3585],["Fujairah Port",25.1767,56.3612],["Saqr Port, Ras Al Khaimah",25.7743,55.9554]]},
+ SA:{en:"Saudi Arabia",es:"Arabia Saudita",cc:"sa",c:[24.7,46.7],ports:[["King Abdulaziz Port, Dammam",26.4936,50.2006],["Jeddah Islamic Port",21.4686,39.1694],["Riyadh Dry Port",24.6544,46.77]]},
+ OM:{en:"Oman",es:"Omán",cc:"om",c:[23.6,58.4],ports:[["Sohar Port",24.5047,56.6183],["Port of Salalah",16.9419,54.0089]]},
+ QA:{en:"Qatar",es:"Catar",cc:"qa",c:[25.3,51.5],ports:[["Hamad Port",25.013,51.605]]},
+ KW:{en:"Kuwait",es:"Kuwait",cc:"kw",c:[29.37,47.98],ports:[["Shuwaikh Port",29.3533,47.93]]},
+ BH:{en:"Bahrain",es:"Baréin",cc:"bh",c:[26.2,50.6],ports:[["Khalifa Bin Salman Port",26.155,50.661]]},
+ JO:{en:"Jordan",es:"Jordania",cc:"jo",c:[31.95,35.9],ports:[["Port of Aqaba",29.495,34.99]]},
+ EG:{en:"Egypt",es:"Egipto",cc:"eg",c:[30.05,31.24],ports:[["Port Said",31.235,32.313],["Port of Alexandria",31.189,29.873]]},
+ XX:{en:"Other country",es:"Otro país",cc:"",c:[24.4,54.5],ports:[]}
+};
+var CONT = {en:["20' dry container","40' dry container","40' high cube","20' reefer","40' reefer","Flatbed / loose cargo","Part load (LCL)","Not sure"],
+            es:["Contenedor seco 20'","Contenedor seco 40'","40' high cube","Reefer 20'","Reefer 40'","Plataforma / carga suelta","Carga parcial (LCL)","No estoy seguro"]};
+var TEMPS = {en:["Ambient (dry)","Chilled +2 to +8 °C","Frozen −18 °C","Other"],es:["Ambiente (seco)","Refrigerado +2 a +8 °C","Congelado −18 °C","Otra"]};
+var CUST = {en:["Already cleared","I need customs clearance","Bonded / free zone transit","Not sure"],es:["Ya despachado en aduana","Necesito despacho de aduana","En tránsito / zona franca","No estoy seguro"]};
+var DG = {en:["No","Yes (IMO / hazardous)","Not sure"],es:["No","Sí (IMO / peligrosa)","No estoy seguro"]};
+var EXTRA = {
+ en:{ready:["Container number and bill of lading or delivery order","Pick-up terminal and delivery address with an on-site contact","Preferred dates and delivery hours","Cargo type, weight and temperature"],
+     how:["Send the quote form: it takes about two minutes","We reply with the price and the truck schedule","We collect from the port, deliver, and send photo proof of delivery","The empty container goes back to the terminal or depot"],
+     faq:[["How is the price calculated?","Mainly by road distance, container size, temperature, waiting time at the port or site, and any special handling. The form shows the distance for your route."],
+          ["Can you take a container across the border?","Yes, within the GCC on request. Choose the pick-up and delivery countries in the form and we will confirm the route and documents."],
+          ["Do you handle customs?","We coordinate with licensed customs agents, so clearance and delivery can be booked together."],
+          ["What happens if the truck waits at my warehouse?","A free unloading window is included. Extra waiting time is agreed in the quote before we confirm."]]},
+ es:{ready:["Número de contenedor y BL u orden de entrega","Terminal de recogida y dirección de entrega con un contacto en el lugar","Fechas preferidas y horario de entrega","Tipo de carga, peso y temperatura"],
+     how:["Envía el formulario: tarda unos dos minutos","Te respondemos con el precio y el horario del camión","Recogemos en el puerto, entregamos y te enviamos foto de la entrega","Devolvemos el contenedor vacío a la terminal o al depósito"],
+     faq:[["¿Cómo se calcula el precio?","Principalmente por la distancia por carretera, el tamaño del contenedor, la temperatura, el tiempo de espera en puerto o almacén y cualquier manejo especial. El formulario te muestra la distancia de tu ruta."],
+          ["¿Pueden cruzar fronteras con un contenedor?","Sí, dentro del CCG bajo solicitud. Elige el país de recogida y de entrega en el formulario y te confirmamos la ruta y los documentos."],
+          ["¿Se encargan de la aduana?","Coordinamos con agentes de aduana autorizados, así puedes reservar despacho y entrega juntos."],
+          ["¿Qué pasa si el camión espera en mi almacén?","Incluimos un tiempo libre de descarga. El tiempo extra se acuerda en la cotización antes de confirmar."]]}
+};
+
 var L = "en", curFilter = "all";
 function tr(k){return (I[L][k]!==undefined)?I[L][k]:k}
 function svg(k,vb){return '<svg viewBox="0 0 '+(vb||64)+' '+(vb||64)+'">'+IC[k]+'</svg>'}
@@ -553,7 +666,7 @@ function render(){
   document.getElementById('b-es').classList.toggle('on',L==='es');
   // chips
   document.getElementById('chips').innerHTML = S.filter(function(s){return s.chip}).map(function(s){
-    return '<button class="chip" onclick="openQuote(\''+s.id+'\')">'+svg(s.ic)+s[L].t+'</button>'}).join('');
+    return '<button class="chip" onclick="openInfo(\''+s.id+'\')">'+svg(s.ic)+s[L].t+'</button>'}).join('');
   // filters
   var f = '<button data-f="all">'+tr('all')+'</button>';
   for (var c in CATS) f += '<button data-f="'+c+'">'+CATS[c][L]+'</button>';
@@ -580,6 +693,7 @@ function render(){
   var qc = document.getElementById('qctry'), cs = qc.value;
   qc.innerHTML = ['AE','PA','DO','CU'].map(function(k){return '<option value="'+k+'">'+CTRY[k][L]+'</option>'}).join('');
   if (cs) qc.value = cs;
+  renderShipSelects();
 }
 function setLang(l, manual){ L = l; if (manual) { try { localStorage.setItem('maye_lang', l) } catch(e){} } render(); }
 function detectLang(){
@@ -600,6 +714,8 @@ function openQuote(sid){
   if (/Panama/.test(tz)) qc.value='PA'; else if (/Santo_Domingo/.test(tz)) qc.value='DO'; else if (/Havana/.test(tz)) qc.value='CU';
   if (sid) document.getElementById('qsrv').value = sid;
   openM('qov');
+  toggleShip();
+  if (sid==='reefer') setTemp(1);
 }
 function openInfo(id){
   var s = S.filter(function(x){return x.id===id})[0], d = s[L];
@@ -607,6 +723,7 @@ function openInfo(id){
     '<div class="kicker">'+CATS[s.cat][L]+'</div><h3 style="margin-top:8px">'+d.t+'</h3><p class="lead">'+d.d+'</p>'+
     '<h4>'+tr('incl')+'</h4><ul>'+d.i.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>'+
     '<h4>'+tr('avail')+'</h4><div class="where">'+s.where.map(function(k){return '<span>'+CTRY[k][L]+'</span>'}).join('')+'</div>'+
+    (SHIP[s.id] ? shipInfo() : '')+
     '<button class="btn btn-red arr" style="width:100%;margin-top:24px" onclick="openQuote(\''+s.id+'\')">'+tr('ask')+'</button></div></div>';
   openM('iov');
 }
@@ -616,22 +733,152 @@ function openPost(i){
     '<button class="btn btn-red arr" style="width:100%;margin-top:10px" onclick="openQuote()">'+tr('cta_quote')+'</button></div></div>';
   openM('iov');
 }
+function val(id){ var e=document.getElementById(id); return e ? (e.value||'').trim() : '' }
+function selText(id){ var e=document.getElementById(id); return e && e.selectedIndex>=0 ? e.options[e.selectedIndex].text : '' }
 function sendQuote(e){
   e.preventDefault();
-  var f = e.target, btn = document.getElementById('qsend');
-  var sv = f.service.options[f.service.selectedIndex].text, ct = f.country.options[f.country.selectedIndex].text;
-  var data = {name:f.name.value, company:f.company.value, email:f.email.value, phone:f.phone.value, service:sv, country:ct, notes:f.notes.value,
-    _subject:'New quote request: '+sv+' ('+ct+')', _template:'table', _captcha:'false', language:L};
+  var f = e.target, btn = document.getElementById('qsend'), err = document.getElementById('q_err');
+  err.hidden = true;
+  if (!val('q_name') || !val('q_em') || !val('q_phn') || !document.getElementById('q_em').checkValidity()) { err.textContent = tr('q_need_basic'); err.hidden = false; return false; }
+  var sid = f.service.value, sv = selText('qsrv'), ship = !!SHIP[sid];
+  if (ship && (!PINS.pu || !PINS.de)) { err.textContent = tr('q_need_route'); err.hidden = false; document.getElementById('qmap').scrollIntoView({behavior:'smooth',block:'center'}); return false; }
+  var data = {name:val('q_name'), company:val('q_co'), email:val('q_em'), phone:val('q_phn'), service:sv, notes:val('q_notes'), language:L, _template:'table', _captcha:'false'};
+  var subj;
+  if (ship) {
+    var pu = PINS.pu, de = PINS.de, ll = function(p){return p.lat.toFixed(5)+','+p.lng.toFixed(5)};
+    data.pickup_country = selText('q_pc'); data.pickup_point = pu.name; data.pickup_coords = ll(pu);
+    data.delivery_country = selText('q_dc'); data.delivery_address = de.name; data.delivery_coords = ll(de);
+    data.road_distance = document.getElementById('q_kmv').textContent; data.driving_time = document.getElementById('q_tv').textContent;
+    data.route_map = 'https://www.google.com/maps/dir/?api=1&origin='+ll(pu)+'&destination='+ll(de)+'&travelmode=driving';
+    data.collect_from = val('q_d1'); data.deliver_by = val('q_d2');
+    data.container = selText('q_ct'); data.quantity = val('q_qty');
+    data.temperature = TEMPS[L][TEMP] + (TEMP===3 && val('q_tc') ? ': '+val('q_tc') : '');
+    data.weight_per_container_t = val('q_wt'); data.cargo = val('q_goods'); data.customs = selText('q_cust'); data.dangerous_goods = selText('q_dg');
+    data.loading_help = document.getElementById('q_unl').checked ? 'Yes' : 'No';
+    subj = 'Quote: '+sv+' · '+pu.name.split(',')[0]+' → '+de.name.split(',')[0]+' ('+data.road_distance+')';
+  } else {
+    data.country = selText('qctry'); subj = 'New quote request: '+sv+' ('+data.country+')';
+  }
+  data._subject = subj;
   btn.disabled = true; btn.textContent = tr('q_sending');
   fetch('https://formsubmit.co/ajax/'+EMAIL, {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(data)})
     .then(function(r){ if(!r.ok) throw 0; return r.json() })
     .then(function(){ showOk() })
     .catch(function(){
-      var body = 'Name: '+data.name+'\nCompany: '+data.company+'\nEmail: '+data.email+'\nPhone: '+data.phone+'\nService: '+sv+'\nCountry: '+ct+'\n\nNotes:\n'+data.notes;
-      window.location.href = 'mailto:'+EMAIL+'?subject='+encodeURIComponent(data._subject)+'&body='+encodeURIComponent(body);
+      var body = Object.keys(data).filter(function(k){return k[0]!=='_'}).map(function(k){return k.replace(/_/g,' ')+': '+data[k]}).join('\n');
+      window.location.href = 'mailto:'+EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
       showOk();
     });
   return false;
+}
+
+/* ---------- detailed shipping quote ---------- */
+var MAP = null, PINS = {pu:null, de:null}, MK = {pu:null, de:null}, ROUTE = null, PINMODE = 'pu', TEMP = 0, routeTimer = null;
+function opts(arr, sel){ return arr.map(function(t,i){ return '<option value="'+i+'"'+(i==sel?' selected':'')+'>'+t+'</option>' }).join('') }
+function renderShipSelects(){
+  var pc = document.getElementById('q_pc'); if (!pc) return;
+  var dc = document.getElementById('q_dc'), pv = pc.value || 'AE', dv = dc.value || 'AE';
+  var co = Object.keys(GEO).map(function(k){ return '<option value="'+k+'">'+GEO[k][L]+'</option>' }).join('');
+  pc.innerHTML = co; dc.innerHTML = co; pc.value = pv; dc.value = dv;
+  fillPorts(true);
+  ['q_ct','q_cust','q_dg'].forEach(function(id){ var e=document.getElementById(id), v=e.value; e.innerHTML = opts(id==='q_ct'?CONT[L]:id==='q_cust'?CUST[L]:DG[L], v===''?0:v) });
+  document.getElementById('q_temp').innerHTML = TEMPS[L].map(function(t,i){ return '<button type="button" class="'+(i===TEMP?'on':'')+'" onclick="setTemp('+i+')">'+t+'</button>' }).join('');
+  if (PINS.pu) document.getElementById('q_fromv').textContent = PINS.pu.name.split(',')[0];
+}
+function fillPorts(keep){
+  var pc = document.getElementById('q_pc').value, pp = document.getElementById('q_pp'), v = pp.value;
+  var ports = GEO[pc].ports;
+  pp.innerHTML = '<option value="">—</option>' + ports.map(function(p,i){ return '<option value="'+i+'">'+p[0]+'</option>' }).join('') + '<option value="map">'+tr('q_other_pt')+'</option>';
+  if (keep && v) pp.value = v;
+  if (!keep && MAP) MAP.setView(GEO[pc].c, 6);
+}
+function setTemp(i){ TEMP = i; document.querySelectorAll('#q_temp button').forEach(function(b,j){ b.classList.toggle('on', j===i) }); document.getElementById('q_tc').hidden = (i!==3); }
+function toggleShip(){
+  var ship = !!SHIP[document.getElementById('qsrv').value];
+  document.getElementById('ship').hidden = !ship;
+  document.getElementById('genCtry').hidden = ship;
+  if (ship) setTimeout(initMap, 60);
+}
+function pinIcon(k){ return L_.divIcon({className:'', html:'<div class="pin '+k+'"></div>', iconSize:[18,18], iconAnchor:[9,9]}) }
+var L_ = window.LEAF; // Leaflet (window.L is reused for the language)
+function initMap(){
+  L_ = window.LEAF;
+  if (!L_) { document.getElementById('qmap').innerHTML = '<p style="padding:16px;color:#6A6C70;font-size:14px">Map could not load. Describe the pick-up and delivery addresses in the notes.</p>'; return; }
+  if (MAP) { MAP.invalidateSize(); return; }
+  MAP = L_.map('qmap', {scrollWheelZoom:false}).setView(GEO.AE.c, 7);
+  L_.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}).addTo(MAP);
+  MAP.on('click', function(e){ setPin(PINMODE, e.latlng.lat, e.latlng.lng, null); if (PINMODE==='pu') { document.getElementById('q_pp').value='map'; setPinMode('de'); } });
+}
+function setPinMode(k){ PINMODE = k; document.getElementById('mt-pu').classList.toggle('on', k==='pu'); document.getElementById('mt-de').classList.toggle('on', k==='de'); }
+function setPin(k, lat, lng, name){
+  if (!MAP) initMap(); if (!MAP) return;
+  PINS[k] = {lat:lat, lng:lng, name: name || (tr('q_pinned')+' '+lat.toFixed(4)+', '+lng.toFixed(4))};
+  if (MK[k]) MK[k].setLatLng([lat,lng]); else {
+    MK[k] = L_.marker([lat,lng], {draggable:true, icon:pinIcon(k)}).addTo(MAP);
+    MK[k].on('dragend', function(ev){ var p = ev.target.getLatLng(); setPin(k, p.lat, p.lng, null); if (k==='pu') document.getElementById('q_pp').value='map'; });
+  }
+  document.getElementById(k==='pu'?'q_fromv':'q_tov').textContent = PINS[k].name.split(',')[0];
+  if (!name) reverseName(k, lat, lng);
+  fitPins(); scheduleRoute();
+}
+function fitPins(){ var pts = ['pu','de'].filter(function(k){return PINS[k]}).map(function(k){return [PINS[k].lat,PINS[k].lng]}); if (pts.length===2) MAP.fitBounds(pts, {padding:[40,40]}); else if (pts.length===1) MAP.setView(pts[0], 11); }
+function pickPort(){
+  var pc = document.getElementById('q_pc').value, v = document.getElementById('q_pp').value;
+  if (v==='' ) return;
+  if (v==='map') { setPinMode('pu'); return; }
+  var p = GEO[pc].ports[+v]; setPin('pu', p[1], p[2], p[0]); setPinMode('de');
+}
+function findAddr(){
+  var q = val('q_ds'); if (!q) return;
+  var cc = GEO[document.getElementById('q_dc').value].cc;
+  document.getElementById('q_tov').textContent = tr('q_calc');
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language='+L+(cc?'&countrycodes='+cc:'')+'&q='+encodeURIComponent(q))
+    .then(function(r){return r.json()}).then(function(a){
+      if (!a || !a.length) { document.getElementById('q_tov').textContent = '–'; alertErr(tr('q_notfound')); return; }
+      setPin('de', +a[0].lat, +a[0].lon, a[0].display_name);
+    }).catch(function(){ document.getElementById('q_tov').textContent='–'; alertErr(tr('q_notfound')); });
+}
+document.addEventListener('keydown', function(e){ if (e.key==='Enter' && document.activeElement && document.activeElement.id==='q_ds') { e.preventDefault(); findAddr(); } });
+function alertErr(m){ var e=document.getElementById('q_err'); e.textContent=m; e.hidden=false; setTimeout(function(){e.hidden=true}, 6000); }
+var revTimer = {};
+function reverseName(k, lat, lng){
+  clearTimeout(revTimer[k]);
+  revTimer[k] = setTimeout(function(){
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&zoom=16&accept-language='+L+'&lat='+lat+'&lon='+lng)
+      .then(function(r){return r.json()}).then(function(a){
+        if (a && a.display_name && PINS[k] && PINS[k].lat===lat) { PINS[k].name = a.display_name; document.getElementById(k==='pu'?'q_fromv':'q_tov').textContent = a.display_name.split(',')[0]; }
+      }).catch(function(){});
+  }, 1100);
+}
+function scheduleRoute(){ clearTimeout(routeTimer); routeTimer = setTimeout(calcRoute, 350); }
+function hav(a,b){ var R=6371, t=Math.PI/180, dl=(b.lat-a.lat)*t, dg=(b.lng-a.lng)*t, x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a.lat*t)*Math.cos(b.lat*t)*Math.sin(dg/2)*Math.sin(dg/2); return 2*R*Math.asin(Math.sqrt(x)); }
+function fmtTime(sec){ var h=Math.floor(sec/3600), m=Math.round((sec%3600)/60); return h? h+' h '+m+' min' : m+' min'; }
+function calcRoute(){
+  if (!PINS.pu || !PINS.de) return;
+  var a = PINS.pu, b = PINS.de, kmv = document.getElementById('q_kmv'), tv = document.getElementById('q_tv');
+  kmv.textContent = tr('q_calc'); tv.textContent = '…';
+  fetch('https://router.project-osrm.org/route/v1/driving/'+a.lng+','+a.lat+';'+b.lng+','+b.lat+'?overview=full&geometries=geojson')
+    .then(function(r){return r.json()}).then(function(j){
+      if (!j.routes || !j.routes.length) throw 0;
+      var r = j.routes[0];
+      kmv.textContent = Math.round(r.distance/1000).toLocaleString() + ' km';
+      tv.textContent = fmtTime(r.duration);
+      if (ROUTE) MAP.removeLayer(ROUTE);
+      ROUTE = L_.geoJSON(r.geometry, {style:{color:'#D7261E', weight:4, opacity:.85}}).addTo(MAP);
+      MAP.fitBounds(ROUTE.getBounds(), {padding:[40,40]});
+    }).catch(function(){
+      var km = Math.round(hav(a,b)*1.25);
+      kmv.textContent = '~'+km.toLocaleString()+' km'; tv.textContent = tr('q_approx');
+      if (ROUTE) MAP.removeLayer(ROUTE);
+      ROUTE = L_.polyline([[a.lat,a.lng],[b.lat,b.lng]], {color:'#D7261E', weight:3, dashArray:'6 8'}).addTo(MAP);
+    });
+}
+function shipInfo(){
+  var x = EXTRA[L], ports = GEO.AE.ports.map(function(p){return '<span>'+p[0]+'</span>'}).join('') + '<span>GCC · '+(L==='en'?'cross-border on request':'transfronterizo bajo solicitud')+'</span>';
+  return '<h4 style="margin-top:22px">'+tr('routes')+'</h4><div class="ports">'+ports+'</div>'+
+    '<h4>'+tr('how')+'</h4><ol>'+x.how.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ol>'+
+    '<h4>'+tr('ready')+'</h4><ul>'+x.ready.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul>'+
+    '<h4>'+tr('faq')+'</h4><div class="faq">'+x.faq.map(function(q){return '<details><summary>'+q[0]+'</summary><p>'+q[1]+'</p></details>'}).join('')+'</div>';
 }
 function showOk(){
   document.getElementById('qin').innerHTML = '<div class="ok"><div class="ic">✓</div><h3>'+tr('q_ok_h')+'</h3><p class="lead">'+tr('q_ok_p')+'</p><button class="btn btn-dark" onclick="closeM(\'qov\');location.reload()">'+tr('q_close')+'</button></div>';
