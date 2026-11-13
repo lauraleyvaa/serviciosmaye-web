@@ -667,7 +667,7 @@ function render(){
   document.getElementById('b-es').classList.toggle('on',L==='es');
   // chips
   document.getElementById('chips').innerHTML = S.filter(function(s){return s.chip}).map(function(s){
-    return '<button class="chip" onclick="openInfo(\''+s.id+'\')">'+svg(s.ic)+s[L].t+'</button>'}).join('');
+    return '<button class="chip" onclick="openQuote(\''+s.id+'\')">'+svg(s.ic)+s[L].t+'</button>'}).join('');
   // filters
   var f = '<button data-f="all">'+tr('all')+'</button>';
   for (var c in CATS) f += '<button data-f="'+c+'">'+CATS[c][L]+'</button>';
@@ -723,10 +723,9 @@ function openInfo(id){
   var s = S.filter(function(x){return x.id===id})[0], d = s[L];
   document.getElementById('iin').innerHTML = '<div class="det"><div class="pic" style="background:'+(s.bg==='r'?'#D7261E':s.bg==='g'?'#2A2B2F':'#111214')+'">'+svg(s.ic)+'</div><div class="in">'+
     '<div class="kicker">'+CATS[s.cat][L]+'</div><h3 style="margin-top:8px">'+d.t+'</h3><p class="lead">'+d.d+'</p>'+
-    (SHIP[s.id] ? '<button class="btn btn-red arr" style="width:100%;margin:0 0 22px" onclick="openQuote(\''+s.id+'\')">'+tr('ask')+'</button>' : '')+
+
     '<h4>'+tr('incl')+'</h4><ul>'+d.i.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>'+
     '<h4>'+tr('avail')+'</h4><div class="where">'+s.where.map(function(k){return '<span>'+CTRY[k][L]+'</span>'}).join('')+'</div>'+
-    (SHIP[s.id] ? shipInfo() : '')+
     '<button class="btn btn-red arr" style="width:100%;margin-top:24px" onclick="openQuote(\''+s.id+'\')">'+tr('ask')+'</button></div></div>';
   openM('iov');
 }
