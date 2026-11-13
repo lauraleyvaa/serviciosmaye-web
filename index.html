@@ -623,7 +623,8 @@ var POSTS = [
    b:"<p>Un producto fresco empieza a perder calidad desde el momento en que se cosecha. Una buena cadena de frío frena ese proceso.</p><h4>Cinco reglas</h4><p>1. Enfriar el producto lo antes posible tras la cosecha.<br>2. Mantener la temperatura adecuada para cada producto: no todo va a la misma temperatura.<br>3. No romper la cadena: carga y descarga rápidas.<br>4. Separar productos que no viajan bien juntos.<br>5. Controlar la temperatura durante todo el viaje.</p><h4>Cómo ayudamos</h4><p>Con nosotros el transporte refrigerado y el almacenaje en frío funcionan como un solo servicio, para que tu producto llegue tan fresco como salió.</p>"}}
 ];
 
-var SHIP = {cargo:1, container:1, reefer:1, broker:1};
+var SHIP = {cargo:1};  // services with their own detailed quote form
+var DETAILED = false;
 var GEO = {
  AE:{en:"United Arab Emirates",es:"Emiratos Árabes Unidos",cc:"ae",c:[24.4,54.5],ports:[["Jebel Ali Port, Dubai",25.0112,55.0614],["Jebel Ali Free Zone (JAFZA)",25.0006,55.1066],["Port Rashid, Dubai",25.2687,55.2777],["Khalifa Port, Abu Dhabi",24.8093,54.6447],["Zayed Port, Abu Dhabi",24.5243,54.3807],["Port Khalid, Sharjah",25.363,55.378],["Khorfakkan Port",25.3483,56.3585],["Fujairah Port",25.1767,56.3612],["Saqr Port, Ras Al Khaimah",25.7743,55.9554]]},
  SA:{en:"Saudi Arabia",es:"Arabia Saudita",cc:"sa",c:[24.7,46.7],ports:[["King Abdulaziz Port, Dammam",26.4936,50.2006],["Jeddah Islamic Port",21.4686,39.1694],["Riyadh Dry Port",24.6544,46.77]]},
@@ -712,15 +713,17 @@ function openQuote(sid){
   var tz=''; try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
   var qc=document.getElementById('qctry');
   if (/Panama/.test(tz)) qc.value='PA'; else if (/Santo_Domingo/.test(tz)) qc.value='DO'; else if (/Havana/.test(tz)) qc.value='CU';
-  if (sid) document.getElementById('qsrv').value = sid;
+  DETAILED = !!(sid && SHIP[sid]);
+  document.getElementById('qsrv').value = sid || 'other';
+  document.getElementById('qsrv').disabled = DETAILED;
   openM('qov');
   toggleShip();
-  if (sid==='reefer') setTemp(1);
 }
 function openInfo(id){
   var s = S.filter(function(x){return x.id===id})[0], d = s[L];
   document.getElementById('iin').innerHTML = '<div class="det"><div class="pic" style="background:'+(s.bg==='r'?'#D7261E':s.bg==='g'?'#2A2B2F':'#111214')+'">'+svg(s.ic)+'</div><div class="in">'+
     '<div class="kicker">'+CATS[s.cat][L]+'</div><h3 style="margin-top:8px">'+d.t+'</h3><p class="lead">'+d.d+'</p>'+
+    (SHIP[s.id] ? '<button class="btn btn-red arr" style="width:100%;margin:0 0 22px" onclick="openQuote(\''+s.id+'\')">'+tr('ask')+'</button>' : '')+
     '<h4>'+tr('incl')+'</h4><ul>'+d.i.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>'+
     '<h4>'+tr('avail')+'</h4><div class="where">'+s.where.map(function(k){return '<span>'+CTRY[k][L]+'</span>'}).join('')+'</div>'+
     (SHIP[s.id] ? shipInfo() : '')+
@@ -740,7 +743,7 @@ function sendQuote(e){
   var f = e.target, btn = document.getElementById('qsend'), err = document.getElementById('q_err');
   err.hidden = true;
   if (!val('q_name') || !val('q_em') || !val('q_phn') || !document.getElementById('q_em').checkValidity()) { err.textContent = tr('q_need_basic'); err.hidden = false; return false; }
-  var sid = f.service.value, sv = selText('qsrv'), ship = !!SHIP[sid];
+  var sid = f.service.value, sv = selText('qsrv'), ship = DETAILED && !!SHIP[sid];
   if (ship && (!PINS.pu || !PINS.de)) { err.textContent = tr('q_need_route'); err.hidden = false; document.getElementById('qmap').scrollIntoView({behavior:'smooth',block:'center'}); return false; }
   var data = {name:val('q_name'), company:val('q_co'), email:val('q_em'), phone:val('q_phn'), service:sv, notes:val('q_notes'), language:L, _template:'table', _captcha:'false'};
   var subj;
@@ -794,7 +797,7 @@ function fillPorts(keep){
 }
 function setTemp(i){ TEMP = i; document.querySelectorAll('#q_temp button').forEach(function(b,j){ b.classList.toggle('on', j===i) }); document.getElementById('q_tc').hidden = (i!==3); }
 function toggleShip(){
-  var ship = !!SHIP[document.getElementById('qsrv').value];
+  var ship = DETAILED && !!SHIP[document.getElementById('qsrv').value];
   document.getElementById('ship').hidden = !ship;
   document.getElementById('genCtry').hidden = ship;
   if (ship) setTimeout(initMap, 60);
