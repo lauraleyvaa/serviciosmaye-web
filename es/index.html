@@ -220,6 +220,28 @@ section.band{padding-block:clamp(4rem,8vw,6.5rem)}
 @keyframes slide{to{transform:translateX(-50%)}}
 
 /* why */
+.tr{background:var(--paper);border-block:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:2.4rem}
+.stats div{background:var(--ground);padding:1.4rem 1.2rem;display:grid;gap:.35rem}
+.stats b{font:700 clamp(2.4rem,5vw,3.4rem)/1 var(--display);color:var(--red)}
+.stats span{font:600 .8rem/1.35 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;margin-bottom:2.6rem}
+.proof article{border:1px solid var(--line);border-top:3px solid var(--red);background:var(--ground);padding:1.4rem;min-width:0}
+.proof h3{font:600 1.15rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--ink);margin:0 0 .6rem}
+.proof p{margin:0;color:var(--text)}
+.groups h3{font:600 .85rem/1.3 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 1rem}
+.groups ul{list-style:none;margin:0 0 1rem;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.groups li{border:1px solid var(--line);background:var(--chip);color:var(--ink);font:600 .95rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:.7rem .95rem}
+.groups p{color:var(--muted);margin:0;font-size:.92rem}
+.lead{margin-top:2.2rem;padding-top:1.6rem;border-top:1px solid var(--line);color:var(--text);max-width:70ch}
+.lead b{color:var(--ink)}
+@media (max-width:820px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.proof{grid-template-columns:minmax(0,1fr)}}
+.tr .note{color:var(--muted);font-size:.9rem;margin:-1.6rem 0 2.4rem}
+.gmq{margin:0 0 .4rem;background:var(--ground)}
+.gmq .marquee-track{animation-direction:reverse;animation-duration:32s}
+.gmq span{color:var(--muted);transition:color .3s}
+.gmq:hover span{color:var(--ink)}
+.groups h3{margin-bottom:1.2rem}
 .why{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:3rem;align-items:center}
 .why .big{font:700 clamp(5rem,13vw,10rem)/.85 var(--display);color:var(--red);letter-spacing:.02em}
 .why .big small{display:block;font:600 1rem/1.4 var(--display);letter-spacing:.14em;color:var(--ink);margin-top:1rem}
@@ -395,7 +417,7 @@ footer .lang a[aria-current]{background:#fff;color:#0B0E13}
 <div class="trust">
   <ul class="wrap">
     <li><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><div><b>Desde 2014</b>Moviendo carga a tiempo</div></li>
-    <li><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6M8 11h.01M12 11h.01M16 11h.01"/></svg></span><div><b>Nivel hotelero</b>Suministro para Meliá y Blue Diamond</div></li>
+    <li><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6M8 11h.01M12 11h.01M16 11h.01"/></svg></span><div><b>Nivel hotelero</b>Suministro a 9 grupos hoteleros internacionales</div></li>
     <li><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><div><b>Foto de entrega</b>En cada viaje</div></li>
     <li><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>&lt; 24 h</b>Respuesta a cada presupuesto</div></li>
   </ul>
@@ -468,13 +490,36 @@ footer .lang a[aria-current]{background:#fff;color:#0B0E13}
     <div class="rv"><div class="big">2014<small>Moviendo carga a tiempo</small></div></div>
     <div>
       <div class="head" style="margin-bottom:1.2rem"><p class="eyebrow">Por qué Ma&amp;Ye</p><h2>Entrega de nivel hotelero, ahora para carga pesada</h2></div>
-      <p>Desde 2014 abastecemos resorts en los cayos de Cuba para grupos como Meliá y Blue Diamond. Allí, si el camión llega tarde, la cocina se queda corta. Esa misma disciplina de horarios es la que aplicamos a los contenedores en EAU.</p>
+      <p>Desde 2014 abastecemos resorts en cayos remotos del Caribe para grupos como Meliá y Blue Diamond. Allí, si el camión llega tarde, la cocina se queda corta. Esa misma disciplina de horarios es la que aplicamos a los contenedores en EAU.</p>
       <div class="facts">
         <div><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>Un solo contacto del presupuesto a la entrega</div>
         <div><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>Una foto de cada carga entregada</div>
         <div><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg></span>Una respuesta clara si algo cambia</div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="band tr" id="track">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Trayectoria</p><h2>Camiones, puertos y hoteles: lo que ya operamos</h2><p>Antes de EAU, Servicios Ma&amp;Ye se hizo un nombre en el Caribe, donde un camión tarde significa una cocina de hotel vacía o un contenedor parado en el puerto.</p></div>
+    <div class="stats rv">
+      <div><b data-n="10">10</b><span>Rastras</span></div>
+      <div><b data-n="6">6</b><span>Portacontenedores</span></div>
+      <div><b data-n="2">2</b><span>Camiones refrigerados</span></div>
+      <div><b data-n="9">9</b><span>Grupos hoteleros abastecidos</span></div>
+    </div>
+    <p class="note">Flota propia en el Caribe. En EAU trabajamos con transportistas asociados y verificados.</p>
+    <div class="proof">
+      <article class="rv"><h3>Contenedores de puerto</h3><p>Extraemos contenedores de un gran puerto del Caribe y los entregamos a clientes en todo el país, incluido el trabajo de flota bajo contrato con la compañía holandesa Womy.</p></article>
+      <article class="rv"><h3>Distribución de cerveza</h3><p>Distribuidores regionales oficiales de una de las principales cerveceras del Caribe: recogida en fábrica, reparto regional y una red de venta de más de 15 productos.</p></article>
+      <article class="rv"><h3>Suministro a resorts</h3><p>Productos frescos de nuestra propia finca, transportados a resorts todo incluido en cayos remotos del Caribe, donde cada entrega tiene que llegar a tiempo.</p></article>
+    </div>
+    <div class="groups rv"><h3>Grupos hoteleros que hemos abastecido</h3></div>
+  </div>
+  <div class="marquee gmq" aria-label="Grupos hoteleros que hemos abastecido"><div class="marquee-track"><span>Meliá</span><span>Iberostar</span><span>Blue Diamond</span><span>Royalton</span><span>Memories</span><span>MGM Muthu</span><span>Valentin</span><span>Banyan Tree · Dhawa</span><span>Grand Aston</span><span>Vila Galé</span><span>Resonance</span><span>Meliá</span><span>Iberostar</span><span>Blue Diamond</span><span>Royalton</span><span>Memories</span><span>MGM Muthu</span><span>Valentin</span><span>Banyan Tree · Dhawa</span><span>Grand Aston</span><span>Vila Galé</span><span>Resonance</span></div></div>
+  <div class="wrap">
+    <p class="lead rv"><b>Dirigida por quienes construyeron una industria hotelera.</b> Nuestra cofundadora fue 12 años vicepresidenta de Recursos Humanos de uno de los mayores grupos hoteleros del Caribe y después 7 años directora de formación de directivos de un Ministerio de Turismo nacional.</p>
   </div>
 </section>
 
@@ -576,5 +621,8 @@ function track(e,p){try{window.posthog&&posthog.capture&&posthog.capture(e,Objec
   new IntersectionObserver(function(es){bar.classList.toggle('show',!es[0].isIntersecting)}).observe(q);
 })();
 </script>
+<script>(function(){var els=[].slice.call(document.querySelectorAll('[data-n]'));if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+els.forEach(function(el){el.textContent='0'});var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io.unobserve(e.target);var n=+e.target.dataset.n,t0=performance.now();
+(function f(t){var p=Math.min(1,(t-t0)/1100);e.target.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)})},{threshold:.4});els.forEach(function(el){io.observe(el)})})();</script>
 </body>
 </html>
